@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d178d14d-3b69-482d-8d87-f35664f85a0b" name="Default Changelist" comment="1d fitting finished, not using moment fit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlirWindowModify.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlirWindowModify.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1coebgdU70bad0MBc9WMf9ayzHy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../OneDrive - Rice University/Devices/BFS-PGE-120S4M/myapp" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\TrappedIonPC\cq5\OneDrive - rice.edu\Devices\BFS-PGE-120S4M\myapp" />
+      <recent name="C:\Users\TrappedIonPC\cq5\OneDrive - rice.edu\Devices\BFS-PGE-120S4M-CS\myapp" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.start">
+    <configuration name="FlirCamFake" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myapp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/FlirCamFake.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="fitgauss (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myapp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fitgauss.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="nodenames" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myapp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/nodenames.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myapp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/start.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="testplot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myapp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testplot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.start" />
+        <item itemvalue="Python.fitgauss (1)" />
+        <item itemvalue="Python.nodenames" />
+        <item itemvalue="Python.FlirCamFake" />
+        <item itemvalue="Python.testplot" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d178d14d-3b69-482d-8d87-f35664f85a0b" name="Default Changelist" comment="" />
+      <created>1591199446429</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591199446429</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/gaussfitter" />
+      <path value="$PROJECT_DIR$/src/gaussfitter" />
+      <path value="$PROJECT_DIR$/src/gaussfitter/astropy_helpers" />
+    </ignored-roots>
+    <MESSAGE value="1d fitting finished, not using moment fit" />
+    <option name="LAST_COMMIT_MESSAGE" value="1d fitting finished, not using moment fit" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2398" y="215" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599704008299">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state x="2398" y="215" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1599704008299" />
+    <state x="754" y="294" key="FileChooserDialogImpl" timestamp="1602431472564">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="754" y="294" key="FileChooserDialogImpl/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1602431472564" />
+    <state x="2724" y="314" key="FileChooserDialogImpl/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1602278092122" />
+    <state x="603" y="233" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1596334042180" />
+    <state width="2027" height="257" key="GridCell.Tab.0.bottom" timestamp="1599704012169">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1899" height="257" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1594682293129" />
+    <state width="2027" height="257" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1599704012169" />
+    <state width="1515" height="192" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1594057052007" />
+    <state width="2027" height="257" key="GridCell.Tab.0.center" timestamp="1599704012169">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1899" height="257" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1594682293129" />
+    <state width="2027" height="257" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1599704012169" />
+    <state width="1515" height="192" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1594057052007" />
+    <state width="2027" height="257" key="GridCell.Tab.0.left" timestamp="1599704012169">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1899" height="257" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1594682293129" />
+    <state width="2027" height="257" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1599704012169" />
+    <state width="1515" height="192" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1594057052007" />
+    <state width="2027" height="257" key="GridCell.Tab.0.right" timestamp="1599704012169">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state width="1899" height="257" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1594682293129" />
+    <state width="2027" height="257" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1599704012169" />
+    <state width="1515" height="192" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1594057052007" />
+    <state width="2027" height="510" key="GridCell.Tab.1.bottom" timestamp="1594685117737">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state width="2027" height="510" key="GridCell.Tab.1.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1594685117737" />
+    <state width="2027" height="510" key="GridCell.Tab.1.center" timestamp="1594685117737">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state width="2027" height="510" key="GridCell.Tab.1.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1594685117737" />
+    <state width="2027" height="510" key="GridCell.Tab.1.left" timestamp="1594685117737">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state width="2027" height="510" key="GridCell.Tab.1.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1594685117737" />
+    <state width="2027" height="510" key="GridCell.Tab.1.right" timestamp="1594685117737">
+      <screen x="1920" y="0" width="2048" height="1112" />
+    </state>
+    <state width="2027" height="510" key="GridCell.Tab.1.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@1920.0.2048.1112" timestamp="1594685117737" />
+    <state x="465" y="236" width="727" height="351" key="com.intellij.ide.util.TipDialog" timestamp="1596334009368">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="465" y="236" width="727" height="351" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1596334009368" />
+    <state x="-1032" y="-207" width="1025" height="693" maximized="true" key="dock-window-1" timestamp="1602431474035">
+      <screen x="-2048" y="0" width="2048" height="1112" />
+    </state>
+    <state x="-1032" y="-207" width="1025" height="693" maximized="true" key="dock-window-1/0.0.1536.824/-1080.-834.1080.1880@0.0.1536.824" timestamp="1602335717801" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/FlirCamFake.py</url>
+          <line>97</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/FlirCamController.py</url>
+          <line>4</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
