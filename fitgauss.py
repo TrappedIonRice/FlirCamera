@@ -14,6 +14,18 @@ class Parameter:
         return self.value
 
 
+# def fit(function, parameters, y, x=None):
+#     def f(params):
+#         i = 0
+#         for p in parameters:
+#             p.set(params[i])
+#             i += 1
+#         return y - function(x)
+#
+#     if x is None: x = np.arange(y.shape[0])
+#     p = [param() for param in parameters]
+#     return optimize.leastsq(f, p)
+
 def fit(function, parameters, y, x=None):
     def f(params):
         i = 0
@@ -25,7 +37,6 @@ def fit(function, parameters, y, x=None):
     if x is None: x = np.arange(y.shape[0])
     p = [param() for param in parameters]
     return optimize.leastsq(f, p)
-
 
 def fitgauss1d(xx, yy, truncate=True):
     '''
@@ -40,7 +51,8 @@ def fitgauss1d(xx, yy, truncate=True):
     else:
         x0 = np.sum(xx * yy) / np.sum(yy)
     mu = Parameter(x0)
-    background = Parameter(min(yy))
+    # background = Parameter(min(yy))
+    background = Parameter(1 / np.average([1/n**2 for n in yy]))
     height = Parameter(max(yy) - background())
     prep_sigma = xx[yy > (height() * np.exp(-1 / 2)) + background()]
     sigma = Parameter(abs(prep_sigma[-1] - prep_sigma[0]) / 2)
