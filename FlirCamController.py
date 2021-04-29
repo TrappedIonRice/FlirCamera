@@ -47,19 +47,19 @@ class FlirCamController:
         # Change binning mode to 2x2 to increase frame rate
         node_binninghorizontal = PySpin.CIntegerPtr(nodemap.GetNode('BinningHorizontal'))
         if not self.check_available_writable(node_binninghorizontal): return False
-        node_binninghorizontal.SetValue(2)
+        node_binninghorizontal.SetValue(1)
         self.update_log(
             '%s is set to %f' % (node_binninghorizontal.GetDisplayName(), node_binninghorizontal.GetValue()))
 
         node_binningvertical = PySpin.CIntegerPtr(nodemap.GetNode('BinningVertical'))
         if not self.check_available_writable(node_binningvertical): return False
-        node_binningvertical.SetValue(2)
+        node_binningvertical.SetValue(1)
         self.update_log('%s is set to %f' % (node_binningvertical.GetDisplayName(), node_binningvertical.GetValue()))
 
         # set frame size after binning
-        self.framewidth = 2000
-        self.frameheight = 1500
-        self.pixel_size *= 2
+        self.framewidth = 4000
+        self.frameheight = 3000
+        self.pixel_size *= 1
         self.frame = zeros((self.frameheight, self.framewidth), dtype=uint8)
         self.background = zeros((self.frameheight, self.framewidth), dtype=uint8)
         self.nobackground = zeros((self.frameheight, self.framewidth), dtype=uint8)

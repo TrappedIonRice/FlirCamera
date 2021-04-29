@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d178d14d-3b69-482d-8d87-f35664f85a0b" name="Default Changelist" comment="1d fitting finished, not using moment fit">
-      <change afterPath="$PROJECT_DIR$/test_image1.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fitgauss.py" beforeDir="false" afterPath="$PROJECT_DIR$/fitgauss.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlirCamController.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlirCamController.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/laserbeamsizefromimage.py" beforeDir="false" afterPath="$PROJECT_DIR$/laserbeamsizefromimage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,7 +42,7 @@
       <recent name="C:\Users\TrappedIonPC\cq5\OneDrive - rice.edu\Devices\BFS-PGE-120S4M-CS\myapp" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.laserbeamsizefromimage">
+  <component name="RunManager" selected="Python.start">
     <configuration name="FlirCamFake" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myapp" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -135,9 +134,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\TrappedIonPC\anaconda3\envs\cam37dev1\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/start.py" />
@@ -190,22 +189,26 @@
     <option name="LAST_COMMIT_MESSAGE" value="1d fitting finished, not using moment fit" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1899" height="250" key="GridCell.Tab.0.bottom" timestamp="1619728079872">
+    <state x="414" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1619733443094">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619728079872" />
-    <state width="1899" height="250" key="GridCell.Tab.0.center" timestamp="1619728079872">
+    <state x="414" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619733443094" />
+    <state width="1899" height="250" key="GridCell.Tab.0.bottom" timestamp="1619733935604">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619728079872" />
-    <state width="1899" height="250" key="GridCell.Tab.0.left" timestamp="1619728079872">
+    <state width="1899" height="250" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619733935604" />
+    <state width="1899" height="250" key="GridCell.Tab.0.center" timestamp="1619733935604">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619728079872" />
-    <state width="1899" height="250" key="GridCell.Tab.0.right" timestamp="1619728079872">
+    <state width="1899" height="250" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619733935604" />
+    <state width="1899" height="250" key="GridCell.Tab.0.left" timestamp="1619733935604">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619728079872" />
+    <state width="1899" height="250" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619733935604" />
+    <state width="1899" height="250" key="GridCell.Tab.0.right" timestamp="1619733935604">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="250" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619733935604" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
