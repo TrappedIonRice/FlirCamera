@@ -13,6 +13,120 @@ class Parameter:
     def __call__(self):
         return self.value
 
+def pickpeak(x, npicks=2, rdiff=5):
+    """
+Search for peaks in data. Return arrays may contain NaN, e.g., if less peaks than required are found.
+@param x: data sequence
+@type x: ndarray
+@param npicks: number of peaks to return.
+@param rdiff: minimum spacing (in data points) between two peaks
+@return: tuple of ndarray.
+@rtype: (peak values, peak locations)
+"""
+
+    # initialize result values with NaN
+    vals = np.array([np.NaN] * npicks)
+    loc = np.array([0] * npicks)
+
+    rmin = np.nanmin(x) - 1
+    dx = np.diff(np.r_[rmin, x, rmin])
+
+    # find position and their values of peaks (local maxima)
+    pos_peaks, = np.nonzero((dx[0:-1] >= 0.0) & (dx[1:] <= 0.0))
+    val_peaks = x[pos_peaks]  # corresponding peak value
+
+    # select peaks in descending order, seperated by at least rdiff
+    for i in range(npicks):
+
+        mi = np.nanargmax(val_peaks)  # find index of largest peak
+
+        peakval = val_peaks[mi]
+        peakpos = pos_peaks[mi]
+
+        vals[i] = peakval
+        loc[i] = peakpos
+
+        # for next iteration: only keep peaks at least rdiff points
+        # distance from last peak
+        ind = np.nonzero(abs(pos_peaks - peakpos) > rdiff)
+        if len(ind) == 0:  # nothing left!
+            break
+        val_peaks = val_peaks[ind]
+        pos_peaks = pos_peaks[ind]
+        if np.isfinite(val_peaks).sum() == 0:
+            break
+    return vals, loc
+
+def find_startpar_gauss(x, prof):
+    """
+    find good initial estimates for fit parameters based on
+    horizontal or vertical profiles
+
+    @param x: x or y values
+    @param prof: horizontal of vertical profiles
+    @return: [A, mu, sigma, offset]
+    """
+
+    Nsh = 20  # number (half) of points for smoothing
+    gs = Nsh / 2  # width gaussian
+
+    # use gaussian for smoothing
+    gx = np.arange(2 * Nsh + 1) - Nsh
+    gy = np.exp(-gx ** 2 / gs ** 2)
+    gy /= gy.sum()
+
+    # smooth profil, limit axes to valid values
+    profsmooth = np.convolve(prof, gy, mode='valid')
+    xs = x[Nsh:-Nsh]
+
+    # estimate peak position and fwhm width
+    peakval, peakpos = pickpeak(profsmooth, 1)
+
+    try:
+        halfval, halfpos = pickpeak(
+            -np.abs(profsmooth - (peakval + np.nanmin(profsmooth)) / 2.0),
+            npicks=2)
+        width = np.abs(np.diff(xs[halfpos]))
+    except:
+        print("Warning: can't determine initial guess for width", sys.exc_info())
+        width = 20
+
+    off = np.nanmin(profsmooth)  # TODO: can we do better (robust?)
+    try:
+        m = xs[peakpos]
+    except IndexError:
+        m = 0.5 * (x[0] + x[-1])
+
+    s = width
+    A = peakval - off
+
+    # make gaussian fit
+    #startpars = np.r_[A, m, s, off]
+    startpars = np.r_[m, s, A, off]
+
+    def gauss1d(pars, x, v0 = 0):
+        """calculate 1d gaussian.
+        @return: difference of 1d gaussian and reference (data) values
+        @param pars: parameters of gaussian. see source.
+        @param x: x values
+        @param v0: reference value
+        """
+        m, s, A, offs = pars[0:4]
+        v = A*np.exp(- (x-m)**2 / (2*s**2)) + offs
+        return v-v0
+
+    fitpar = optimize.leastsq(gauss1d,startpars,args = (x, prof))
+    # else:
+    #     fitpar = LM.LM(self.fJgauss1d,
+    #                    startpars,
+    #                    args=(x, prof),
+    #                    kmax=30,
+    #                    eps1=1e-6,
+    #                    eps2=1e-6,
+    #                    verbose=self.verbose,
+    #                    )
+    return fitpar
+
 
 # def fit(function, parameters, y, x=None):
 #     def f(params):
@@ -38,7 +152,7 @@ def fit(function, parameters, y, x=None):
     p = [param() for param in parameters]
     return optimize.leastsq(f, p)
 
-def fitgauss1d(xx, yy, truncate=True):
+def fitgauss1d(xx, zz, truncate=True):
     '''
     fit 1d gaussian function using scipy.optimize.leastsq
     :param xx:
@@ -47,20 +161,21 @@ def fitgauss1d(xx, yy, truncate=True):
     :return:
     '''
     if truncate:
-        x0, xx, yy = truncate_center(xx, yy)
+        x0, xx, zz = truncate_center(xx, zz)
     else:
-        x0 = np.sum(xx * yy) / np.sum(yy)
+        x0 = np.sum(xx * zz) / np.sum(zz)
     mu = Parameter(x0)
-    background = Parameter(min(yy))
+    background = Parameter(min(zz))
     # background = Parameter(1 / np.average([1/n**2 for n in yy]))
-    height = Parameter(max(yy) - background())
-    prep_sigma = xx[yy > (height() * np.exp(-1 / 2)) + background()]
+    height = Parameter(max(zz) - background())
+    prep_sigma = xx[zz > (height() * np.exp(-1 / 2)) + background()]
     sigma = Parameter(abs(prep_sigma[-1] - prep_sigma[0]) / 2)
 
     def f(x):
         return height() * np.exp(-((x - mu()) / sigma()) ** 2 / 2) + background()
-
-    return fit(f, [mu, sigma, height, background], yy, x=xx)
+    #fitresults=fit(f, [mu, sigma, height, background], zz, x=xx) old bad function
+    #print("Newfit = ",find_startpar_gauss(xx,zz))
+    return find_startpar_gauss(xx,zz)
 
 
 def fitgauss1d_moment(xx, yy, truncate=True):
@@ -166,20 +281,38 @@ def fitguase2d_int():
 
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
+    import cv2
+    data = cv2.imread("test_image1.jpg")
+    lx, ly, lz = data.shape
+    print(data.shape)
+    xx = np.arange(lx)
+    yy = np.arange(ly)
+    xx, yy = np.meshgrid(np.arange(ly), np.arange(lx))
+    zz = data[::, :: ,2]
+    #print(xx.shape,yy.shape, zz.shape)
+
+    start_time = time.time()
+    for i in range(1):
+        fitgauss2d_section(np.arange(0, ly), np.arange(0, lx), zz)
+    print("--- %.8f seconds ---" % (time.time() - start_time))
+    #print(fitgauss2d_section(np.arange(0, ly), np.arange(0, lx), zz))
+
+
+
+
+
+
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib import cm
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    xx,yy = np.meshgrid(np.arange(4000),np.arange(3000))
-    zz = (gauss2d(1000, 1000, 100, 400, 1, 0, xx, yy) + 1 + np.random.rand(*(xx.shape)) * 0.5)*100
+    #surf = ax.plot_surface(xx, yy, zz, cmap=cm.coolwarm, linewidth=0, antialiased=True)
+    #xx,yy = np.meshgrid(np.arange(4000),np.arange(3000))
+    #zz = (gauss2d(1000, 1000, 100, 400, 1, 0, xx, yy) + 1 + np.random.rand(*(xx.shape)) * 0.5)*100
+
     surf = ax.plot_surface(xx, yy, zz, cmap=cm.coolwarm, linewidth=0, antialiased=True)
     plt.show()
-    start_time = time.time()
-    for i in range(1):
-        fitgauss2d_section(np.arange(0, 4000), np.arange(0, 3000), zz)
-    print("--- %.8f seconds ---" % (time.time() - start_time))
-    print(fitgauss2d_section(np.arange(0, 4000), np.arange(0, 3000), zz))
 
     # xx = np.arange(0, 4000, 1) * 0.57
     # yy = gauss1d(1000, 200, 1, xx) + 1 + np.random.rand(xx.size) * 0.5
