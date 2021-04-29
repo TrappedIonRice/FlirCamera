@@ -51,8 +51,8 @@ def fitgauss1d(xx, yy, truncate=True):
     else:
         x0 = np.sum(xx * yy) / np.sum(yy)
     mu = Parameter(x0)
-    # background = Parameter(min(yy))
-    background = Parameter(1 / np.average([1/n**2 for n in yy]))
+    background = Parameter(min(yy))
+    # background = Parameter(1 / np.average([1/n**2 for n in yy]))
     height = Parameter(max(yy) - background())
     prep_sigma = xx[yy > (height() * np.exp(-1 / 2)) + background()]
     sigma = Parameter(abs(prep_sigma[-1] - prep_sigma[0]) / 2)
