@@ -41,7 +41,7 @@
       <recent name="C:\Users\TrappedIonPC\cq5\OneDrive - rice.edu\Devices\BFS-PGE-120S4M-CS\myapp" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.start">
+  <component name="RunManager" selected="Python.laserbeamsizefromimage">
     <configuration name="FlirCamFake" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myapp" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -76,6 +76,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fitgauss.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="laserbeamsizefromimage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myapp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/laserbeamsizefromimage.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -126,41 +147,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="testplot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="myapp" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testplot.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.fitgauss (1)" />
-      <item itemvalue="Python.testplot" />
       <item itemvalue="Python.FlirCamFake" />
       <item itemvalue="Python.nodenames" />
       <item itemvalue="Python.start" />
+      <item itemvalue="Python.laserbeamsizefromimage" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.laserbeamsizefromimage" />
         <item itemvalue="Python.start" />
         <item itemvalue="Python.fitgauss (1)" />
         <item itemvalue="Python.nodenames" />
         <item itemvalue="Python.FlirCamFake" />
-        <item itemvalue="Python.testplot" />
       </list>
     </recent_temporary>
   </component>
@@ -188,22 +188,22 @@
     <option name="LAST_COMMIT_MESSAGE" value="1d fitting finished, not using moment fit" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1899" height="250" key="GridCell.Tab.0.bottom" timestamp="1619715007857">
+    <state width="1899" height="250" key="GridCell.Tab.0.bottom" timestamp="1619715473099">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619715007857" />
-    <state width="1899" height="250" key="GridCell.Tab.0.center" timestamp="1619715007856">
+    <state width="1899" height="250" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619715473099" />
+    <state width="1899" height="250" key="GridCell.Tab.0.center" timestamp="1619715473099">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619715007856" />
-    <state width="1899" height="250" key="GridCell.Tab.0.left" timestamp="1619715007856">
+    <state width="1899" height="250" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619715473099" />
+    <state width="1899" height="250" key="GridCell.Tab.0.left" timestamp="1619715473099">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619715007856" />
-    <state width="1899" height="250" key="GridCell.Tab.0.right" timestamp="1619715007856">
+    <state width="1899" height="250" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619715473099" />
+    <state width="1899" height="250" key="GridCell.Tab.0.right" timestamp="1619715473099">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619715007856" />
+    <state width="1899" height="250" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619715473099" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
