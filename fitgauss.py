@@ -164,12 +164,12 @@ def fitgauss1d(xx, zz, truncate=True):
         x0, xx, zz = truncate_center(xx, zz)
     else:
         x0 = np.sum(xx * zz) / np.sum(zz)
-    mu = Parameter(x0)
-    background = Parameter(min(zz))
-    # background = Parameter(1 / np.average([1/n**2 for n in yy]))
-    height = Parameter(max(zz) - background())
-    prep_sigma = xx[zz > (height() * np.exp(-1 / 2)) + background()]
-    sigma = Parameter(abs(prep_sigma[-1] - prep_sigma[0]) / 2)
+    # mu = Parameter(x0)
+    # background = Parameter(min(zz))
+    # # background = Parameter(1 / np.average([1/n**2 for n in yy]))
+    # height = Parameter(max(zz) - background())
+    # prep_sigma = xx[zz > (height() * np.exp(-1 / 2)) + background()]
+    # sigma = Parameter(abs(prep_sigma[-1] - prep_sigma[0]) / 2)
 
     def f(x):
         return height() * np.exp(-((x - mu()) / sigma()) ** 2 / 2) + background()

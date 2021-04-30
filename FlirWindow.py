@@ -9,7 +9,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 
+FONT='Arial'
+FONTDIM=16
+CLMNDIM=5
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -30,51 +35,73 @@ class Ui_MainWindow(object):
         self.gridLayoutImage.setObjectName("gridLayoutImage")
         self.gridLayoutFitResult = QtWidgets.QGridLayout()
         self.gridLayoutFitResult.setObjectName("gridLayoutFitResult")
+
         self.labelxWaist = QtWidgets.QLabel(self.centralwidget)
         self.labelxWaist.setObjectName("labelxWaist")
+        self.labelxWaist.setFont(QFont(FONT, FONTDIM))
         self.gridLayoutFitResult.addWidget(self.labelxWaist, 2, 0, 1, 1)
+
         self.labelHeight = QtWidgets.QLabel(self.centralwidget)
         self.labelHeight.setObjectName("labelHeight")
+        self.labelHeight.setFont(QFont(FONT, FONTDIM))
         self.gridLayoutFitResult.addWidget(self.labelHeight, 4, 0, 1, 1)
+
         self.labelUnit = QtWidgets.QLabel(self.centralwidget)
         self.labelUnit.setObjectName("labelUnit")
         self.gridLayoutFitResult.addWidget(self.labelUnit, 5, 0, 1, 1)
+
         self.labelyCenter = QtWidgets.QLabel(self.centralwidget)
         self.labelyCenter.setObjectName("labelyCenter")
+        self.labelyCenter.setFont(QFont(FONT, FONTDIM))
+
         self.gridLayoutFitResult.addWidget(self.labelyCenter, 1, 0, 1, 1)
+
         self.labelyWaist = QtWidgets.QLabel(self.centralwidget)
+        self.labelyWaist.setFont(QFont(FONT, FONTDIM))
         self.labelyWaist.setObjectName("labelyWaist")
         self.gridLayoutFitResult.addWidget(self.labelyWaist, 3, 0, 1, 1)
+
         self.labelxCenter = QtWidgets.QLabel(self.centralwidget)
+        self.labelxCenter.setFont(QFont(FONT, FONTDIM))
         self.labelxCenter.setObjectName("labelxCenter")
         self.gridLayoutFitResult.addWidget(self.labelxCenter, 0, 0, 1, 1)
+
         self.lineEditxWaist = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditxWaist.setEnabled(True)
+        self.lineEditxWaist.setFont(QFont(FONT, FONTDIM))
         self.lineEditxWaist.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.lineEditxWaist.setObjectName("lineEditxWaist")
-        self.gridLayoutFitResult.addWidget(self.lineEditxWaist, 2, 1, 1, 1)
+        self.gridLayoutFitResult.addWidget(self.lineEditxWaist, 2, 1, 1, CLMNDIM)
+
         self.lineEditxCenter = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditxCenter.setEnabled(True)
+        self.lineEditxCenter.setFont(QFont(FONT, FONTDIM))
         self.lineEditxCenter.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.lineEditxCenter.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.lineEditxCenter.setObjectName("lineEditxCenter")
-        self.gridLayoutFitResult.addWidget(self.lineEditxCenter, 0, 1, 1, 1)
+        self.gridLayoutFitResult.addWidget(self.lineEditxCenter, 0, 1, 1, CLMNDIM)
+
         self.lineEdityCenter = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdityCenter.setEnabled(True)
+        self.lineEdityCenter.setFont(QFont(FONT, FONTDIM))
         self.lineEdityCenter.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.lineEdityCenter.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.lineEdityCenter.setObjectName("lineEdityCenter")
-        self.gridLayoutFitResult.addWidget(self.lineEdityCenter, 1, 1, 1, 1)
+        self.gridLayoutFitResult.addWidget(self.lineEdityCenter, 1, 1, 1, CLMNDIM)
+
         self.lineEdityWaist = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdityWaist.setEnabled(True)
+        self.lineEdityWaist.setFont(QFont(FONT, FONTDIM))
         self.lineEdityWaist.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.lineEdityWaist.setObjectName("lineEdityWaist")
-        self.gridLayoutFitResult.addWidget(self.lineEdityWaist, 3, 1, 1, 1)
+        self.gridLayoutFitResult.addWidget(self.lineEdityWaist, 3, 1, 1, CLMNDIM)
+
         self.lineEditHeight = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditHeight.setEnabled(True)
+        self.lineEditHeight.setFont(QFont(FONT, FONTDIM))
         self.lineEditHeight.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.lineEditHeight.setObjectName("lineEditHeight")
-        self.gridLayoutFitResult.addWidget(self.lineEditHeight, 4, 1, 1, 1)
+        self.gridLayoutFitResult.addWidget(self.lineEditHeight, 4, 1, 1, CLMNDIM)
         self.horizontalLayoutUnit = QtWidgets.QHBoxLayout()
         self.horizontalLayoutUnit.setObjectName("horizontalLayoutUnit")
         self.radioButtonUnitUm = QtWidgets.QRadioButton(self.centralwidget)
@@ -254,7 +281,7 @@ class Ui_MainWindow(object):
         self.labelUnit.setText(_translate("MainWindow", "Unit"))
         self.labelyCenter.setText(_translate("MainWindow", "Y Center"))
         self.labelyWaist.setText(_translate("MainWindow", "Y Waist"))
-        self.labelxCenter.setText(_translate("MainWindow", "X Center:"))
+        self.labelxCenter.setText(_translate("MainWindow", "X Center"))
         self.lineEditxWaist.setText(_translate("MainWindow", "0"))
         self.lineEditxCenter.setText(_translate("MainWindow", "0"))
         self.lineEdityCenter.setText(_translate("MainWindow", "0"))
