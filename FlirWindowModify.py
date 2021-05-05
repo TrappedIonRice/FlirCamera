@@ -1,10 +1,12 @@
 from PyQt5 import QtCore, QtGui
 from pyqtgraph import PlotWidget
+from pyqtgraph import mkPen
 from FlirWindow import Ui_MainWindow
 from fitgauss import fitgauss2d_section, gauss1d
 import numpy as np
 import os
 import cv2
+import math
 
 import matplotlib.pyplot as plt
 
@@ -22,6 +24,15 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.section_ycoord = []
         self.save_dir = os.getcwd()
         self.unit = 0
+
+        # Data for the fitted gaussian
+        self.section_xdata_fit = []
+        self.section_ydata_fit = []
+
+        # Initial Zoom dimensions
+        # self.frame_xcoords = (0, 4000)
+        # self.frame_ycoords = (0, 3000)
+
 
         #logo
         mainwindow.setWindowIcon(QtGui.QIcon('logo.png'))
@@ -45,11 +56,19 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.plotx = PlotWidget(self.centralwidget)
         self.plotx.setObjectName("plotx")
         self.gridLayoutImage.addWidget(self.plotx, 1, 0, 1, 1)
+
+        self.sectionx_fit = self.plotx.plot(self.section_xcoord, self.section_xdata_fit,
+                                            pen=mkPen(color=(0, 255, 0), style=QtCore.Qt.DashLine))
+
         self.sectionx_line = self.plotx.plot(self.section_xcoord,self.section_xdata)
 
         self.ploty = PlotWidget(self.centralwidget)
         self.ploty.setObjectName("ploty")
         self.gridLayoutImage.addWidget(self.ploty,  0, 1, 1, 1)
+
+        self.sectiony_fit = self.ploty.plot(self.section_ydata_fit, self.section_ycoord,
+                                            pen=mkPen(color=(0, 255, 0), style=QtCore.Qt.DashLine))
+
         self.sectiony_line = self.ploty.plot(self.section_ydata,self.section_ycoord)
 
         # set section to the center
@@ -61,6 +80,10 @@ class Ui_CustomWindow(Ui_MainWindow):
 
         # image label mouse press event
         self.labelImage.mousePressEvent = self.label_mousepress()
+
+        # Image label mouse scroll event?
+        # self.labelImage.mouseScrollEvent = self.label_mousescroll()
+
 
         # auto exposure check box
         self.checkbox_auto_exposure()
@@ -107,14 +130,16 @@ class Ui_CustomWindow(Ui_MainWindow):
 
     def update_movie(self):
         self.cam_controller.acquire_continue()
-        self.update_plot()
-        p, ier = fitgauss2d_section(np.arange(0, self.cam_controller.frame.shape[1]),
+        self.p, self.ier = fitgauss2d_section(np.arange(0, self.cam_controller.frame.shape[1]),
                                     np.arange(0, self.cam_controller.frame.shape[0]), self.cam_controller.frame)
-        self.lineEditxCenter.setText('%.4f' % (p[0]*self.unit))
-        self.lineEdityCenter.setText('%.4f' % (p[1]*self.unit))
-        self.lineEditxWaist.setText('%.4f' % (p[2]*2*self.unit))
-        self.lineEdityWaist.setText('%.4f' % (p[3]*2*self.unit))
-        self.lineEditHeight.setText('%.4f' % (p[4]))
+        self.update_plot()
+        # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
+        self.lineEditxCenter.setText('%.4f' % (self.p[0]))
+        self.lineEdityCenter.setText('%.4f' % (self.p[1]))
+        self.lineEditxWaist.setText('%.4f' % (self.p[2] * 2))
+        self.lineEdityWaist.setText('%.4f' % (self.p[3] * 2))
+        self.lineEditHeight.setText('%.4f' % (self.p[4]))
+        
         self.labelImage.setPixmap(QtGui.QPixmap(self.toQImage()))
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
         # plt.plot(gauss1d(p[0],p[2],p[4],np.arange(0, self.cam_controller.frame.shape[1]))+p[5])
@@ -130,6 +155,36 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.section_ydata = self.cam_controller.frame[::,self.section_xctr]
         self.sectiony_line.setData(self.section_ydata,self.section_ycoord)
 
+        # Create the lines for the fitted graph to be plotted below the data
+        self.section_xdata_fit = self.gauss_data(self.p[4], self.p[0], self.p[2], self.p[5], self.section_xcoord.shape[0])
+        self.sectionx_fit.setData(self.section_xcoord, self.section_xdata_fit)
+
+        self.section_ydata_fit = self.gauss_data(self.p[4], self.p[1], self.p[3], self.p[5], self.section_ycoord.shape[0])
+        self.sectiony_fit.setData(self.section_ydata_fit, self.section_ycoord)
+
+    # Gaussian function
+    def gauss(self, t, A, mu, sigma, offset):
+        return A * (math.e ** (-1 * ((t - mu) ** 2) / (2 * (sigma ** 2)))) + offset
+
+    # Plot a gaussian over a range [0, data_range)
+    def gauss_data(self, A, mu, sigma, offset, data_range):
+        out = []
+        for i in range(data_range):
+            out.append(self.gauss(i, A, mu, sigma, offset))
+        return out
+
+    # Unused
+    def trim_picture(self, frame):
+        ar = []
+        y_ratio = (self.frame_ycoords[1] - self.frame_ycoords[0]) / frame.shape[0]
+        x_ratio = (self.frame_xcoords[1] - self.frame_xcoords[0]) / frame.shape[1]
+        for y in range(frame.shape[0]):
+            ar.append([])
+            for x in range(frame.shape[1]):
+                ar[-1].append(frame[int(y * y_ratio + self.frame_ycoords[0])][int(x * x_ratio + self.frame_xcoords[0])])
+        ar = np.array(ar)
+        return ar
+
     def toQImage(self, copy=False):
         '''
         Transfer the format of the frame from numpy.ndarray to QImage
@@ -137,9 +192,19 @@ class Ui_CustomWindow(Ui_MainWindow):
         :param copy:
         :return:
         '''
+
+        # Use whatever the zoom-adjusted coordinates are for the window instead of the original ones
+        # zoomed_window = self.trim_picture(self.cam_controller.frame)
+        # qim = QtGui.QImage(zoomed_window.data, zoomed_window.shape[1],
+        #                    zoomed_window.shape[0], zoomed_window.strides[0],
+        #                    QtGui.QImage.Format_Indexed8).rgbSwapped()
+
+
         qim = QtGui.QImage(self.cam_controller.frame.data, self.cam_controller.frame.shape[1],
                            self.cam_controller.frame.shape[0], self.cam_controller.frame.strides[0],
                            QtGui.QImage.Format_Indexed8).rgbSwapped()
+
+
         # qim.setColorTable(gray_color_table)
         return qim.copy() if copy else qim
 
@@ -160,9 +225,23 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.update_plot()
         return mousepress
 
+    # Unused
+    def label_mousescroll(self):
+        def mousescroll(eventQMouseEvent):
+            label_width = self.labelImage.size().width()
+            label_height = self.labelImage.size().height()
+            mouse_x = eventQMouseEvent.pos().x()
+            mouse_y = eventQMouseEvent.pos().y()
+        return mousescroll
+
     def section_center(self):
-        self.section_xctr = round(float(self.lineEditxCenter.text())/self.unit)
-        self.section_yctr = round(float(self.lineEdityCenter.text())/self.unit)
+        # self.section_xctr = round(float(self.lineEditxCenter.text())/self.unit)
+        # self.section_yctr = round(float(self.lineEdityCenter.text())/self.unit)
+
+        # Instead change center to the centers of each gaussian
+        self.section_xctr = round(self.p[0])
+        self.section_yctr = round(self.p[1])
+
         self.lineEditSectionX.setText(str(self.section_xctr))
         self.lineEditSectionY.setText(str(self.section_yctr))
 
