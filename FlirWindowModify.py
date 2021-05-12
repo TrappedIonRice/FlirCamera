@@ -136,10 +136,10 @@ class Ui_CustomWindow(Ui_MainWindow):
         # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
         self.lineEditxCenter.setText('%.4f' % (self.p[0]))
         self.lineEdityCenter.setText('%.4f' % (self.p[1]))
-        self.lineEditxWaist.setText('%.4f' % (self.p[2] * 2))
-        self.lineEdityWaist.setText('%.4f' % (self.p[3] * 2))
+        self.lineEditxWaist.setText('%.4f' % (self.p[2] * 2*self.unit))
+        self.lineEdityWaist.setText('%.4f' % (self.p[3] * 2*self.unit))
         self.lineEditHeight.setText('%.4f' % (self.p[4]))
-        
+
         self.labelImage.setPixmap(QtGui.QPixmap(self.toQImage()))
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
         # plt.plot(gauss1d(p[0],p[2],p[4],np.arange(0, self.cam_controller.frame.shape[1]))+p[5])
