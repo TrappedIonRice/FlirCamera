@@ -1,7 +1,17 @@
-set root=C:\Users\TrappedIonPC\anaconda3
+setlocal
 
-call %root%\Scripts\activate.bat %root%
+set "psCommand="(new-object -COM 'Shell.Application')^
+.BrowseForFolder(0,'Please choose a folder.',0,0).self.path""
 
-call conda activate cam37
+for /f "usebackq delims=" %%I in (`powershell %psCommand%`) do set "folder=%%I"
 
-call python "C:\Software Programming RiceYb\FlirCamera\start.py"
+setlocal enabledelayedexpansion
+echo You chose !folder!
+endlocal
+
+call %folder%\Scripts\activate.bat
+
+call conda activate camtest
+
+
+call python start.py

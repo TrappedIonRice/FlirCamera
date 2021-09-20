@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d178d14d-3b69-482d-8d87-f35664f85a0b" name="Default Changelist" comment="1d fitting finished, not using moment fit">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/myapp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/myapp.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlirCamController.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlirCamController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlirCamFake.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlirCamFake.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FlirWindowModify.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlirWindowModify.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cam.bat" beforeDir="false" afterPath="$PROJECT_DIR$/cam.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/start.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,13 +32,15 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../LaserLock" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Anaconda3/envs/camtest/python.exe" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -42,19 +50,28 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.start">
-    <configuration name="FlirCamFake" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="cam" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="myapp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Programming\FlirCamera" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="cam.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="FlirCamController" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myapp" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\ProgramData\Anaconda3\envs\camtest\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/FlirCamFake.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/FlirCamController.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -63,7 +80,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="fitgauss (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="ImageAnalysis" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myapp" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -75,7 +92,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fitgauss.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ImageAnalysis.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -105,27 +122,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="nodenames" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="myapp" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/nodenames.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="start" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myapp" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -133,7 +129,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\TrappedIonPC\anaconda3\envs\cam37dev1\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\TrappedIonPC\anaconda3\envs\cam37\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -148,22 +144,21 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.fitgauss (1)" />
-      <item itemvalue="Python.FlirCamFake" />
-      <item itemvalue="Python.nodenames" />
-      <item itemvalue="Python.start" />
+      <item itemvalue="Python.FlirCamController" />
       <item itemvalue="Python.laserbeamsizefromimage" />
+      <item itemvalue="Python.start" />
+      <item itemvalue="Python.ImageAnalysis" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.start" />
+        <item itemvalue="Python.ImageAnalysis" />
+        <item itemvalue="Python.FlirCamController" />
         <item itemvalue="Python.laserbeamsizefromimage" />
-        <item itemvalue="Python.fitgauss (1)" />
-        <item itemvalue="Python.nodenames" />
-        <item itemvalue="Python.FlirCamFake" />
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -177,6 +172,19 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <ignored-roots>
@@ -188,54 +196,30 @@
     <option name="LAST_COMMIT_MESSAGE" value="1d fitting finished, not using moment fit" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1619733443094">
+    <state x="414" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1632169565464">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619733443094" />
-    <state x="2169" y="243" width="1069" height="580" key="#xdebugger.evaluate" timestamp="1619749085612">
-      <screen x="1920" y="0" width="2048" height="1112" />
-    </state>
-    <state x="2169" y="243" width="1069" height="580" key="#xdebugger.evaluate/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619749085612" />
-    <state x="627" y="119" key="CommitChangelistDialog2" timestamp="1620256111396">
+    <state x="414" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1632169565464" />
+    <state width="1899" height="248" key="GridCell.Tab.0.bottom" timestamp="1632169633349">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="627" y="119" key="CommitChangelistDialog2/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1620256111396" />
-    <state x="740" y="279" key="FileChooserDialogImpl" timestamp="1619734420248">
+    <state width="1899" height="248" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1632169633349" />
+    <state width="1899" height="248" key="GridCell.Tab.0.center" timestamp="1632169633349">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="279" key="FileChooserDialogImpl/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619734420248" />
-    <state width="1899" height="250" key="GridCell.Tab.0.bottom" timestamp="1620256224901">
+    <state width="1899" height="248" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1632169633349" />
+    <state width="1899" height="248" key="GridCell.Tab.0.left" timestamp="1632169633349">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1620256224901" />
-    <state width="1899" height="250" key="GridCell.Tab.0.center" timestamp="1620256224900">
+    <state width="1899" height="248" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1632169633349" />
+    <state width="1899" height="248" key="GridCell.Tab.0.right" timestamp="1632169633349">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1620256224900" />
-    <state width="1899" height="250" key="GridCell.Tab.0.left" timestamp="1620256224899">
+    <state width="1899" height="248" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1632169633349" />
+    <state x="463" y="166" key="SettingsEditor" timestamp="1632169629267">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1620256224899" />
-    <state width="1899" height="250" key="GridCell.Tab.0.right" timestamp="1620256224901">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="250" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1620256224901" />
-    <state width="1899" height="223" key="GridCell.Tab.1.bottom" timestamp="1619749087894">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="223" key="GridCell.Tab.1.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619749087894" />
-    <state width="1899" height="223" key="GridCell.Tab.1.center" timestamp="1619749087894">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="223" key="GridCell.Tab.1.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619749087894" />
-    <state width="1899" height="223" key="GridCell.Tab.1.left" timestamp="1619749087892">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="223" key="GridCell.Tab.1.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619749087892" />
-    <state width="1899" height="223" key="GridCell.Tab.1.right" timestamp="1619749087894">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="223" key="GridCell.Tab.1.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1619749087894" />
+    <state x="463" y="166" key="SettingsEditor/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@0.0.1920.1040" timestamp="1632169629267" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -244,11 +228,6 @@
           <url>file://$PROJECT_DIR$/FlirCamFake.py</url>
           <line>97</line>
           <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/FlirCamController.py</url>
-          <line>4</line>
-          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

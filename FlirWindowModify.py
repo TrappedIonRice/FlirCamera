@@ -1,4 +1,6 @@
 from PyQt5 import QtCore, QtGui
+from PyQt5.QtCore import QRect, QPoint
+from PyQt5.QtWidgets import QScrollBar, QScrollArea
 from pyqtgraph import PlotWidget
 from pyqtgraph import mkPen
 from FlirWindow import Ui_MainWindow
@@ -25,13 +27,15 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.save_dir = os.getcwd()
         self.unit = 0
 
+        self.loclist = []
+        self.zoom_x = 0
+        self.zoom_y = 0
+        self.current_scale = 0
+        self.target_scale = 0
+
         # Data for the fitted gaussian
         self.section_xdata_fit = []
         self.section_ydata_fit = []
-
-        # Initial Zoom dimensions
-        # self.frame_xcoords = (0, 4000)
-        # self.frame_ycoords = (0, 3000)
 
 
         #logo
@@ -82,8 +86,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.labelImage.mousePressEvent = self.label_mousepress()
 
         # Image label mouse scroll event?
-        # self.labelImage.mouseScrollEvent = self.label_mousescroll()
-
+        self.labelImage.wheelEvent = self.label_mousewheel()
 
         # auto exposure check box
         self.checkbox_auto_exposure()
@@ -140,7 +143,44 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.lineEdityWaist.setText('%.4f' % (self.p[3] * 2*self.unit))
         self.lineEditHeight.setText('%.4f' % (self.p[4]))
 
-        self.labelImage.setPixmap(QtGui.QPixmap(self.toQImage()))
+        pixmap = QtGui.QPixmap(self.toQImage())
+
+        if self.target_scale <= 0:
+            self.loclist = []
+            self.target_scale = 0
+            self.current_scale = 0
+
+        elif self.target_scale == self.current_scale:
+            self.current_scale = 0
+            for i in self.loclist:
+                self.current_scale += 1
+                imgsize = (pixmap.width(), pixmap.height())
+                [ix, iy] = i
+                rect = QRect(ix, iy, imgsize[0]/2, imgsize[1]/2)
+                pixmap = pixmap.copy(rect)
+
+        elif self.target_scale > self.current_scale:
+            self.loclist.append([self.zoom_x, self.zoom_y])
+            self.current_scale = 0
+            for i in self.loclist:
+                self.current_scale += 1
+                imgsize = (pixmap.width(), pixmap.height())
+                [ix, iy] = i
+                rect = QRect(ix, iy, imgsize[0]/2, imgsize[1]/2)
+                pixmap = pixmap.copy(rect)
+
+        elif self.target_scale < self.current_scale:
+            self.loclist.pop()
+            self.current_scale = 0
+            for i in self.loclist:
+                self.current_scale += 1
+                imgsize = (pixmap.width(), pixmap.height())
+                [ix, iy] = i
+                rect = QRect(ix, iy, imgsize[0]/2, imgsize[1]/2)
+                pixmap = pixmap.copy(rect)
+
+        self.labelImage.setPixmap(pixmap)
+
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
         # plt.plot(gauss1d(p[0],p[2],p[4],np.arange(0, self.cam_controller.frame.shape[1]))+p[5])
         # plt.show()
@@ -173,18 +213,6 @@ class Ui_CustomWindow(Ui_MainWindow):
             out.append(self.gauss(i, A, mu, sigma, offset))
         return out
 
-    # Unused
-    def trim_picture(self, frame):
-        ar = []
-        y_ratio = (self.frame_ycoords[1] - self.frame_ycoords[0]) / frame.shape[0]
-        x_ratio = (self.frame_xcoords[1] - self.frame_xcoords[0]) / frame.shape[1]
-        for y in range(frame.shape[0]):
-            ar.append([])
-            for x in range(frame.shape[1]):
-                ar[-1].append(frame[int(y * y_ratio + self.frame_ycoords[0])][int(x * x_ratio + self.frame_xcoords[0])])
-        ar = np.array(ar)
-        return ar
-
     def toQImage(self, copy=False):
         '''
         Transfer the format of the frame from numpy.ndarray to QImage
@@ -192,13 +220,6 @@ class Ui_CustomWindow(Ui_MainWindow):
         :param copy:
         :return:
         '''
-
-        # Use whatever the zoom-adjusted coordinates are for the window instead of the original ones
-        # zoomed_window = self.trim_picture(self.cam_controller.frame)
-        # qim = QtGui.QImage(zoomed_window.data, zoomed_window.shape[1],
-        #                    zoomed_window.shape[0], zoomed_window.strides[0],
-        #                    QtGui.QImage.Format_Indexed8).rgbSwapped()
-
 
         qim = QtGui.QImage(self.cam_controller.frame.data, self.cam_controller.frame.shape[1],
                            self.cam_controller.frame.shape[0], self.cam_controller.frame.strides[0],
@@ -225,14 +246,16 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.update_plot()
         return mousepress
 
-    # Unused
-    def label_mousescroll(self):
-        def mousescroll(eventQMouseEvent):
-            label_width = self.labelImage.size().width()
-            label_height = self.labelImage.size().height()
-            mouse_x = eventQMouseEvent.pos().x()
-            mouse_y = eventQMouseEvent.pos().y()
-        return mousescroll
+    def label_mousewheel(self):
+        def mousewheel(event):
+            screenpoint = self.labelImage.mapFromGlobal(QtGui.QCursor.pos())
+            self.zoom_x, self.zoom_y = event.pos().x() + screenpoint.x(), event.pos().y() + screenpoint.y()
+            if event.angleDelta().y() > 0:
+                self.target_scale += 1
+            else:
+                self.target_scale -= 1
+            self.update_movie()
+        return mousewheel
 
     def section_center(self):
         # self.section_xctr = round(float(self.lineEditxCenter.text())/self.unit)

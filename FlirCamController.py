@@ -1,4 +1,5 @@
 import PySpin
+from PyQt5.QtWidgets import QScrollBar
 from numpy import zeros, uint8
 
 class FlirCamController:

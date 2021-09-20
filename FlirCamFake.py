@@ -8,7 +8,7 @@ class FakeCam:
         return 10
 
 
-class FakeCamContoller:
+class FakeCamController:
     def initialize(self):
         # Flag representing the status of the continue mode
         self.flag_continue = False
