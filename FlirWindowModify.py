@@ -32,6 +32,8 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.zoom_y = 0
         self.current_scale = 0
         self.target_scale = 0
+        self.zoom_scale_x = 0.0
+        self.zoom_scale_y = 0.0
 
         # Data for the fitted gaussian
         self.section_xdata_fit = []
@@ -150,35 +152,29 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.target_scale = 0
             self.current_scale = 0
 
-        elif self.target_scale == self.current_scale:
+        else:
+            if self.target_scale > self.current_scale:
+                self.loclist.append([self.zoom_x, self.zoom_y])
+            elif self.target_scale < self.current_scale:
+                self.loclist.pop()
             self.current_scale = 0
             for i in self.loclist:
                 self.current_scale += 1
                 imgsize = (pixmap.width(), pixmap.height())
                 [ix, iy] = i
-                rect = QRect(ix, iy, imgsize[0]/2, imgsize[1]/2)
+                ix = float(ix) * pixmap.width() / float(self.cam_controller.framewidth)
+                iy = float(iy) * pixmap.height() / float(self.cam_controller.frameheight)
+                xoffset=min(ix,imgsize[0]-ix,imgsize[0]/4)                    #reduces the image to half or takes the boundary closest to the mouse point
+                yoffset = min(iy, imgsize[1] - iy, imgsize[1] / 4)             #change (1/4) to change the zoom step size
+                xoffset1=min(float(xoffset)/float(imgsize[0]),float(yoffset)/float(imgsize[1]))*imgsize[0]
+                yoffset1 = min(float(xoffset)/float(imgsize[0]), float(yoffset)/float(imgsize[1])) * imgsize[1]
+                rect = QRect(ix-xoffset1, iy-yoffset1, 2*xoffset1, 2*yoffset1)
                 pixmap = pixmap.copy(rect)
 
-        elif self.target_scale > self.current_scale:
-            self.loclist.append([self.zoom_x, self.zoom_y])
-            self.current_scale = 0
-            for i in self.loclist:
-                self.current_scale += 1
-                imgsize = (pixmap.width(), pixmap.height())
-                [ix, iy] = i
-                rect = QRect(ix, iy, imgsize[0]/2, imgsize[1]/2)
-                pixmap = pixmap.copy(rect)
-
-        elif self.target_scale < self.current_scale:
-            self.loclist.pop()
-            self.current_scale = 0
-            for i in self.loclist:
-                self.current_scale += 1
-                imgsize = (pixmap.width(), pixmap.height())
-                [ix, iy] = i
-                rect = QRect(ix, iy, imgsize[0]/2, imgsize[1]/2)
-                pixmap = pixmap.copy(rect)
-
+        self.zoom_scale_x= float(pixmap.width())/float(self.cam_controller.framewidth)  #ratio of the displayed image to the original image
+        self.zoom_scale_y=float(pixmap.height())/float(self.cam_controller.frameheight)  #inequality in zoom_scale_x and zoom_scale_y may indicate that the image is zoomed to very few pixels
+        #print(self.zoom_scale_x)
+        #print(self.zoom_scale_y)
         self.labelImage.setPixmap(pixmap)
 
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
@@ -250,6 +246,8 @@ class Ui_CustomWindow(Ui_MainWindow):
         def mousewheel(event):
             screenpoint = self.labelImage.mapFromGlobal(QtGui.QCursor.pos())
             self.zoom_x, self.zoom_y = event.pos().x() + screenpoint.x(), event.pos().y() + screenpoint.y()
+            self.zoom_x = float(self.zoom_x)*self.cam_controller.framewidth/(2*self.labelImage.size().width())  # scaling from mouse position to display position
+            self.zoom_y = float(self.zoom_y)*self.cam_controller.frameheight/(2*self.labelImage.size().height())
             if event.angleDelta().y() > 0:
                 self.target_scale += 1
             else:
