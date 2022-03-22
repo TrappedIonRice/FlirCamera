@@ -110,6 +110,14 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.unit_change()
         self.radioButtonUnitPixel.toggled.connect(self.unit_change)
 
+        # fit
+        self.fit_trigger()
+        self.checkBoxFit.toggled.connect(self.fit_trigger)
+
+        # zoom
+        self.zoom_trigger()
+        self.checkBoxZoom.toggled.connect(self.zoom_trigger)
+
         # temperature monitor
         self.temperature_timer = QtCore.QTimer()
         self.temperature_timer.timeout.connect(self.update_temperature)
@@ -139,11 +147,11 @@ class Ui_CustomWindow(Ui_MainWindow):
                                     np.arange(0, self.cam_controller.frame.shape[0]), self.cam_controller.frame)
         self.update_plot()
         # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
-        self.lineEditxCenter.setText('%.4f' % (self.p[0]))
-        self.lineEdityCenter.setText('%.4f' % (self.p[1]))
-        self.lineEditxWaist.setText('%.4f' % (self.p[2] * 2*self.unit))
-        self.lineEdityWaist.setText('%.4f' % (self.p[3] * 2*self.unit))
-        self.lineEditHeight.setText('%.4f' % (self.p[4]))
+        self.lineEditxCenter.setText('%.1f' % (self.p[0]))
+        self.lineEdityCenter.setText('%.1f' % (self.p[1]))
+        self.lineEditxWaist.setText('%.1f' % (self.p[2] * 2*self.unit))
+        self.lineEdityWaist.setText('%.1f' % (self.p[3] * 2*self.unit))
+        self.lineEditHeight.setText('%.1f' % (self.p[4]))
 
         pixmap = QtGui.QPixmap(self.toQImage())
 
@@ -180,6 +188,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
         # plt.plot(gauss1d(p[0],p[2],p[4],np.arange(0, self.cam_controller.frame.shape[1]))+p[5])
         # plt.show()
+
         if self.checkBoxAutoExposure.isChecked():
             self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))
 
@@ -312,6 +321,18 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.unit = 1
         else:
             self.unit = self.cam_controller.pixel_size
+
+    def fit_trigger(self):
+        if self.checkBoxFit.isChecked():
+            self.fitBoolean = True
+        else:
+            self.fitBoolean = False
+
+    def zoom_trigger(self):
+        if self.checkBoxZoom.isChecked():
+            self.zoomBoolean = True
+        else:
+            self.zoomBoolean = False
 
     def update_temperature(self):
         self.cam_controller.get_temperature()
