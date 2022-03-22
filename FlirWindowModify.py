@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QRect, QPoint
 from PyQt5.QtWidgets import QScrollBar, QScrollArea
 from pyqtgraph import PlotWidget
@@ -69,6 +69,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.sectionx_line = self.plotx.plot(self.section_xcoord,self.section_xdata)
 
         self.ploty = PlotWidget(self.centralwidget)
+
         self.ploty.setObjectName("ploty")
         self.gridLayoutImage.addWidget(self.ploty,  0, 1, 1, 1)
 
@@ -109,14 +110,6 @@ class Ui_CustomWindow(Ui_MainWindow):
         # unit
         self.unit_change()
         self.radioButtonUnitPixel.toggled.connect(self.unit_change)
-
-        # fit
-        self.fit_trigger()
-        self.checkBoxFit.toggled.connect(self.fit_trigger)
-
-        # zoom
-        self.zoom_trigger()
-        self.checkBoxZoom.toggled.connect(self.zoom_trigger)
 
         # temperature monitor
         self.temperature_timer = QtCore.QTimer()
@@ -310,7 +303,9 @@ class Ui_CustomWindow(Ui_MainWindow):
         else:
             filename += "um"
         filename  += ".jpg"
-        name = QtGui.QFileDialog.getSaveFileName(self.mainwindow, 'Save File',os.path.join(self.save_dir,filename),"Images (*.png *.jpg)")[0]
+        name = QtWidgets.QFileDialog.getSaveFileName(self.mainwindow, 'Save File', os.path.join(self.save_dir, filename),
+                                                 "Images (*.png *.jpg)")[0]
+        # name = QtGui.QFileDialog.getSaveFileName(self.mainwindow, 'Save File',os.path.join(self.save_dir,filename),"Images (*.png *.jpg)")[0]
         if not name is '':
             self.save_dir = os.path.split(name)[0]
             cv2.imwrite(name,frametosave)
@@ -321,18 +316,6 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.unit = 1
         else:
             self.unit = self.cam_controller.pixel_size
-
-    def fit_trigger(self):
-        if self.checkBoxFit.isChecked():
-            self.fitBoolean = True
-        else:
-            self.fitBoolean = False
-
-    def zoom_trigger(self):
-        if self.checkBoxZoom.isChecked():
-            self.zoomBoolean = True
-        else:
-            self.zoomBoolean = False
 
     def update_temperature(self):
         self.cam_controller.get_temperature()
