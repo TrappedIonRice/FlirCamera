@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtCore import QRect, QPoint
-from PyQt5.QtWidgets import QScrollBar, QScrollArea
+from PyQt5.QtWidgets import QScrollBar, QScrollArea, QWidget, QApplication
 from pyqtgraph import PlotWidget
 from pyqtgraph import mkPen
 from FlirWindow import Ui_MainWindow
@@ -154,7 +155,7 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.lineEdityWaist.setText('N/A')
             self.lineEditHeight.setText('N/A')
 
-        pixmap = QtGui.QPixmap(self.toQImage())
+        self.pixmap = QtGui.QPixmap(self.toQImage())
 
         if self.target_scale <= 0:
             self.loclist = []
@@ -169,22 +170,22 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.current_scale = 0
             for i in self.loclist:
                 self.current_scale += 1
-                imgsize = (pixmap.width(), pixmap.height())
+                imgsize = (self.pixmap.width(), self.pixmap.height())
                 [ix, iy] = i
-                ix = float(ix) * pixmap.width() / float(self.cam_controller.framewidth)
-                iy = float(iy) * pixmap.height() / float(self.cam_controller.frameheight)
+                ix = float(ix) * self.pixmap.width() / float(self.cam_controller.framewidth)
+                iy = float(iy) * self.pixmap.height() / float(self.cam_controller.frameheight)
                 xoffset=min(ix,imgsize[0]-ix,imgsize[0]/4)                    #reduces the image to half or takes the boundary closest to the mouse point
                 yoffset = min(iy, imgsize[1] - iy, imgsize[1] / 4)             #change (1/4) to change the zoom step size
                 xoffset1=min(float(xoffset)/float(imgsize[0]),float(yoffset)/float(imgsize[1]))*imgsize[0]
                 yoffset1 = min(float(xoffset)/float(imgsize[0]), float(yoffset)/float(imgsize[1])) * imgsize[1]
                 rect = QRect(ix-xoffset1, iy-yoffset1, 2*xoffset1, 2*yoffset1)
-                pixmap = pixmap.copy(rect)
+                self.pixmap = self.pixmap.copy(rect)
 
-        self.zoom_scale_x= float(pixmap.width())/float(self.cam_controller.framewidth)  #ratio of the displayed image to the original image
-        self.zoom_scale_y=float(pixmap.height())/float(self.cam_controller.frameheight)  #inequality in zoom_scale_x and zoom_scale_y may indicate that the image is zoomed to very few pixels
+        self.zoom_scale_x= float(self.pixmap.width())/float(self.cam_controller.framewidth)  #ratio of the displayed image to the original image
+        self.zoom_scale_y=float(self.pixmap.height())/float(self.cam_controller.frameheight)  #inequality in zoom_scale_x and zoom_scale_y may indicate that the image is zoomed to very few pixels
         #print(self.zoom_scale_x)
         #print(self.zoom_scale_y)
-        self.labelImage.setPixmap(pixmap)
+        self.labelImage.setPixmap(self.pixmap)
 
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
         # plt.plot(gauss1d(p[0],p[2],p[4],np.arange(0, self.cam_controller.frame.shape[1]))+p[5])
