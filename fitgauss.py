@@ -112,7 +112,12 @@ def find_startpar_gauss(x, prof):
         @param v0: reference value
         """
         m, s, A, offs = pars[0:4]
-        v = A*np.exp(- (x-m)**2 / (2*s**2)) + offs
+        # Add the conditions to prevent truedivide by 0 warning in some cases
+        if s == 0:
+            s = 0.0001
+            v = A*np.exp(- (x-m)**2 / (2*s**2)) + offs
+        else:
+            v = A * np.exp(- (x - m) ** 2 / (2 * s ** 2)) + offs
         return v-v0
 
     fitpar = optimize.leastsq(gauss1d,startpars,args = (x, prof))

@@ -136,15 +136,23 @@ class Ui_CustomWindow(Ui_MainWindow):
 
     def update_movie(self):
         self.cam_controller.acquire_continue()
-        self.p, self.ier = fitgauss2d_section(np.arange(0, self.cam_controller.frame.shape[1]),
-                                    np.arange(0, self.cam_controller.frame.shape[0]), self.cam_controller.frame)
-        self.update_plot()
-        # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
-        self.lineEditxCenter.setText('%.1f' % (self.p[0]))
-        self.lineEdityCenter.setText('%.1f' % (self.p[1]))
-        self.lineEditxWaist.setText('%.1f' % (self.p[2] * 2*self.unit))
-        self.lineEdityWaist.setText('%.1f' % (self.p[3] * 2*self.unit))
-        self.lineEditHeight.setText('%.1f' % (self.p[4]))
+        if self.checkBoxFit.isChecked():
+            self.p, self.ier = fitgauss2d_section(np.arange(0, self.cam_controller.frame.shape[1]),
+                                        np.arange(0, self.cam_controller.frame.shape[0]), self.cam_controller.frame)
+            self.update_plot()
+            # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
+            self.lineEditxCenter.setText('%.1f' % (self.p[0]))
+            self.lineEdityCenter.setText('%.1f' % (self.p[1]))
+            self.lineEditxWaist.setText('%.1f' % (self.p[2] * 2*self.unit))
+            self.lineEdityWaist.setText('%.1f' % (self.p[3] * 2*self.unit))
+            self.lineEditHeight.setText('%.1f' % (self.p[4]))
+        else:
+            self.update_plot_withoutfit()
+            self.lineEditxCenter.setText('N/A')
+            self.lineEdityCenter.setText('N/A')
+            self.lineEditxWaist.setText('N/A')
+            self.lineEdityWaist.setText('N/A')
+            self.lineEditHeight.setText('N/A')
 
         pixmap = QtGui.QPixmap(self.toQImage())
 
@@ -184,6 +192,19 @@ class Ui_CustomWindow(Ui_MainWindow):
 
         if self.checkBoxAutoExposure.isChecked():
             self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))
+
+    def update_plot_withoutfit(self):
+        self.section_xcoord = np.arange(0, self.cam_controller.frame.shape[1])
+        self.section_xdata = self.cam_controller.frame[self.section_yctr,::]
+        self.sectionx_line.setData(self.section_xcoord, self.section_xdata)
+        self.section_ycoord = np.arange(0, self.cam_controller.frame.shape[0])
+        self.section_ydata = self.cam_controller.frame[::,self.section_xctr]
+        self.sectiony_line.setData(self.section_ydata,self.section_ycoord)
+
+        self.section_xdata_fit = []
+        self.sectionx_fit.setData(self.section_xcoord, self.section_xdata_fit)
+        self.section_ydata_fit = []
+        self.sectiony_fit.setData(self.section_ydata_fit, self.section_ycoord)
 
     def update_plot(self):
         self.section_xcoord = np.arange(0, self.cam_controller.frame.shape[1])
@@ -241,7 +262,10 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.section_yctr = round(self.cam_controller.frameheight*mouse_y/label_height)
             self.lineEditSectionX.setText(str(self.section_xctr))
             self.lineEditSectionY.setText(str(self.section_yctr))
-            self.update_plot()
+            if self.checkBoxFit.isChecked():
+                self.update_plot()
+            else:
+                self.update_plot_withoutfit()
         return mousepress
 
     def label_mousewheel(self):
