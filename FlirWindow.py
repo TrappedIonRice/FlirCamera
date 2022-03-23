@@ -128,6 +128,10 @@ class Ui_MainWindow(object):
         self.checkBoxZoom.setChecked(False)
         self.checkBoxZoom.setObjectName("checkBoxZoom")
         self.horizontalLayoutToggle.addWidget(self.checkBoxZoom)
+        self.checkBoxCrosshair = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBoxCrosshair.setChecked(False)
+        self.checkBoxCrosshair.setObjectName("checkBoxCrosshair")
+        self.horizontalLayoutToggle.addWidget(self.checkBoxCrosshair)
         self.gridLayoutFitResult.addLayout(self.horizontalLayoutToggle, 6, 1, 1, 1)
 
         self.gridLayoutFitResult.setColumnStretch(0, 1)
@@ -309,6 +313,7 @@ class Ui_MainWindow(object):
         self.radioButtonUnitPixel.setText(_translate("MainWindow", "pixel"))
         self.checkBoxFit.setText(_translate("MainWindow", "Gaussian Fit"))
         self.checkBoxZoom.setText(_translate("MainWindow", "Zoom"))
+        self.checkBoxCrosshair.setText(_translate("MainWindow", "Crosshair"))
         self.pushButtonContinue.setText(_translate("MainWindow", "Start Continue"))
         self.pushButtonSetBg.setText(_translate("MainWindow", "Set Background"))
         self.pushButtonClearBg.setText(_translate("MainWindow", "Clear Background"))

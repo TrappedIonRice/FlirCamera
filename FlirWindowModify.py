@@ -185,6 +185,8 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.zoom_scale_y=float(self.pixmap.height())/float(self.cam_controller.frameheight)  #inequality in zoom_scale_x and zoom_scale_y may indicate that the image is zoomed to very few pixels
         #print(self.zoom_scale_x)
         #print(self.zoom_scale_y)
+        if self.section_xctr != 0 and self.section_yctr != 0 and self.checkBoxCrosshair.isChecked():
+            self.draw_crosshair(self.section_xctr,self.section_yctr)
         self.labelImage.setPixmap(self.pixmap)
 
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
@@ -249,6 +251,17 @@ class Ui_CustomWindow(Ui_MainWindow):
         # qim.setColorTable(gray_color_table)
         return qim.copy() if copy else qim
 
+    def draw_crosshair(self,xcenter,ycenter):
+        painter = QtGui.QPainter(self.pixmap)
+        pen = QtGui.QPen()
+        pen.setWidth(20)
+        pen.setColor(QtGui.QColor('blue'))
+        painter.setPen(pen)
+        painter.setOpacity(0.4)
+        painter.drawLine(xcenter,0,xcenter,3000)
+        painter.drawLine(0,ycenter,4000,ycenter)
+        painter.end()
+
     def set_exptime(self):
         self.cam_controller.configure_exposure(self.lineEditExposureTime.text())
         self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))
@@ -271,15 +284,18 @@ class Ui_CustomWindow(Ui_MainWindow):
 
     def label_mousewheel(self):
         def mousewheel(event):
-            screenpoint = self.labelImage.mapFromGlobal(QtGui.QCursor.pos())
-            self.zoom_x, self.zoom_y = event.pos().x() + screenpoint.x(), event.pos().y() + screenpoint.y()
-            self.zoom_x = float(self.zoom_x)*self.cam_controller.framewidth/(2*self.labelImage.size().width())  # scaling from mouse position to display position
-            self.zoom_y = float(self.zoom_y)*self.cam_controller.frameheight/(2*self.labelImage.size().height())
-            if event.angleDelta().y() > 0:
-                self.target_scale += 1
+            if self.checkBoxZoom.isChecked():
+                screenpoint = self.labelImage.mapFromGlobal(QtGui.QCursor.pos())
+                self.zoom_x, self.zoom_y = event.pos().x() + screenpoint.x(), event.pos().y() + screenpoint.y()
+                self.zoom_x = float(self.zoom_x)*self.cam_controller.framewidth/(2*self.labelImage.size().width())  # scaling from mouse position to display position
+                self.zoom_y = float(self.zoom_y)*self.cam_controller.frameheight/(2*self.labelImage.size().height())
+                if event.angleDelta().y() > 0:
+                    self.target_scale += 1
+                else:
+                    self.target_scale -= 1
+                self.update_movie()
             else:
-                self.target_scale -= 1
-            self.update_movie()
+                self.update_movie()
         return mousewheel
 
     def section_center(self):
