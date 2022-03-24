@@ -21,6 +21,8 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.mainwindow = mainwindow
         self.section_xctr = 0
         self.section_yctr = 0
+        self.section_xctr0 = 0
+        self.section_yctr0 = 0
         self.section_xdata = []
         self.section_ydata = []
         self.section_xcoord = []
@@ -172,13 +174,13 @@ class Ui_CustomWindow(Ui_MainWindow):
                 self.current_scale += 1
                 imgsize = (self.pixmap.width(), self.pixmap.height())
                 [ix, iy] = i
-                ix = float(ix) * self.pixmap.width() / float(self.cam_controller.framewidth)
-                iy = float(iy) * self.pixmap.height() / float(self.cam_controller.frameheight)
-                xoffset=min(ix,imgsize[0]-ix,imgsize[0]/4)                    #reduces the image to half or takes the boundary closest to the mouse point
-                yoffset = min(iy, imgsize[1] - iy, imgsize[1] / 4)             #change (1/4) to change the zoom step size
-                xoffset1=min(float(xoffset)/float(imgsize[0]),float(yoffset)/float(imgsize[1]))*imgsize[0]
-                yoffset1 = min(float(xoffset)/float(imgsize[0]), float(yoffset)/float(imgsize[1])) * imgsize[1]
-                rect = QRect(ix-xoffset1, iy-yoffset1, 2*xoffset1, 2*yoffset1)
+                self.ix = float(ix) * self.pixmap.width() / float(self.cam_controller.framewidth)
+                self.iy = float(iy) * self.pixmap.height() / float(self.cam_controller.frameheight)
+                self.xoffset=min(self.ix,imgsize[0]-ix,imgsize[0]/4)                    #reduces the image to half or takes the boundary closest to the mouse point
+                self.yoffset = min(self.iy, imgsize[1] - iy, imgsize[1] / 4)             #change (1/4) to change the zoom step size
+                self.xoffset1=min(float(self.xoffset)/float(imgsize[0]),float(self.yoffset)/float(imgsize[1]))*imgsize[0]
+                self.yoffset1 = min(float(self.xoffset)/float(imgsize[0]), float(self.yoffset)/float(imgsize[1])) * imgsize[1]
+                rect = QRect(self.ix-self.xoffset1, self.iy-self.yoffset1, 2*self.xoffset1, 2*self.yoffset1)
                 self.pixmap = self.pixmap.copy(rect)
 
         self.zoom_scale_x= float(self.pixmap.width())/float(self.cam_controller.framewidth)  #ratio of the displayed image to the original image
@@ -186,7 +188,10 @@ class Ui_CustomWindow(Ui_MainWindow):
         #print(self.zoom_scale_x)
         #print(self.zoom_scale_y)
         if self.section_xctr != 0 and self.section_yctr != 0 and self.checkBoxCrosshair.isChecked():
-            self.draw_crosshair(self.section_xctr,self.section_yctr)
+            if len(self.loclist) == 0:
+                self.draw_crosshair_unzoom(self.section_xctr,self.section_yctr)
+            else:
+                self.draw_crosshair_zoom(self.section_xctr0, self.section_yctr0)
         self.labelImage.setPixmap(self.pixmap)
 
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
@@ -251,7 +256,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         # qim.setColorTable(gray_color_table)
         return qim.copy() if copy else qim
 
-    def draw_crosshair(self,xcenter,ycenter):
+    def draw_crosshair_unzoom(self,xcenter,ycenter):
         painter = QtGui.QPainter(self.pixmap)
         pen = QtGui.QPen()
         pen.setWidth(20)
@@ -260,6 +265,17 @@ class Ui_CustomWindow(Ui_MainWindow):
         painter.setOpacity(0.4)
         painter.drawLine(xcenter,0,xcenter,3000)
         painter.drawLine(0,ycenter,4000,ycenter)
+        painter.end()
+
+    def draw_crosshair_zoom(self,xcenter,ycenter):
+        painter = QtGui.QPainter(self.pixmap)
+        pen = QtGui.QPen()
+        pen.setWidth(20)
+        pen.setColor(QtGui.QColor('blue'))
+        painter.setPen(pen)
+        painter.setOpacity(0.4)
+        painter.drawLine(xcenter*round(self.pixmap.width()/4000),0,xcenter*round(self.pixmap.width()/4000),self.pixmap.height())
+        painter.drawLine(0,ycenter*round(self.pixmap.height()/3000),self.pixmap.width(),ycenter*round(self.pixmap.height()/3000))
         painter.end()
 
     def set_exptime(self):
@@ -272,8 +288,14 @@ class Ui_CustomWindow(Ui_MainWindow):
             label_height = self.labelImage.size().height()
             mouse_x = eventQMouseEvent.pos().x()
             mouse_y = eventQMouseEvent.pos().y()
-            self.section_xctr = round(self.cam_controller.framewidth*mouse_x/label_width)
-            self.section_yctr = round(self.cam_controller.frameheight*mouse_y/label_height)
+            if len(self.loclist) == 0:
+                self.section_xctr = round(self.cam_controller.framewidth*mouse_x/label_width)
+                self.section_yctr = round(self.cam_controller.frameheight*mouse_y/label_height)
+            else:
+                self.section_xctr = round(2*self.xoffset1*mouse_x/label_width + self.ix-self.xoffset1)
+                self.section_yctr = round(2*self.yoffset1*mouse_y/label_height + self.iy-self.yoffset1)
+                self.section_xctr0 = round(self.cam_controller.framewidth*mouse_x/label_width)
+                self.section_yctr0 = round(self.cam_controller.frameheight*mouse_y/label_height)
             self.lineEditSectionX.setText(str(self.section_xctr))
             self.lineEditSectionY.setText(str(self.section_yctr))
             if self.checkBoxFit.isChecked():
