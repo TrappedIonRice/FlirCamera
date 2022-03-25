@@ -161,6 +161,8 @@ class Ui_CustomWindow(Ui_MainWindow):
 
         if self.target_scale <= 0:
             self.loclist = []
+            self.xlist = []
+            self.ylist = []
             self.target_scale = 0
             self.current_scale = 0
 
@@ -174,24 +176,41 @@ class Ui_CustomWindow(Ui_MainWindow):
                 self.current_scale += 1
                 imgsize = (self.pixmap.width(), self.pixmap.height())
                 [ix, iy] = i
-                self.ix = float(ix) * self.pixmap.width() / float(self.cam_controller.framewidth)
-                self.iy = float(iy) * self.pixmap.height() / float(self.cam_controller.frameheight)
-                self.xoffset=min(self.ix,imgsize[0]-ix,imgsize[0]/4)                    #reduces the image to half or takes the boundary closest to the mouse point
-                self.yoffset = min(self.iy, imgsize[1] - iy, imgsize[1] / 4)             #change (1/4) to change the zoom step size
-                self.xoffset1=min(float(self.xoffset)/float(imgsize[0]),float(self.yoffset)/float(imgsize[1]))*imgsize[0]
-                self.yoffset1 = min(float(self.xoffset)/float(imgsize[0]), float(self.yoffset)/float(imgsize[1])) * imgsize[1]
-                rect = QRect(self.ix-self.xoffset1, self.iy-self.yoffset1, 2*self.xoffset1, 2*self.yoffset1)
-                self.pixmap = self.pixmap.copy(rect)
+                ix = float(ix) * self.pixmap.width() / float(self.cam_controller.framewidth)
+                iy = float(iy) * self.pixmap.height() / float(self.cam_controller.frameheight)
 
-        self.zoom_scale_x= float(self.pixmap.width())/float(self.cam_controller.framewidth)  #ratio of the displayed image to the original image
-        self.zoom_scale_y=float(self.pixmap.height())/float(self.cam_controller.frameheight)  #inequality in zoom_scale_x and zoom_scale_y may indicate that the image is zoomed to very few pixels
+                if ix < round(imgsize[0]/4):
+                    xcorner = 0
+                elif ix > round(3*imgsize[0]/4):
+                    xcorner = round(imgsize[0]/2)
+                else:
+                    xcorner = round(ix - imgsize[0]/4)
+                if iy < round(imgsize[1]/4):
+                    ycorner = 0
+                elif iy > round(3*imgsize[1]/4):
+                    ycorner = round(imgsize[1]/2)
+                else:
+                    ycorner = round(iy - imgsize[1]/4)
+                rect = QRect(xcorner,ycorner,2*imgsize[0]/4,2*imgsize[1]/4)
+
+                #xoffset=min(ix,imgsize[0]-ix,imgsize[0]/4)                    #reduces the image to half or takes the boundary closest to the mouse point
+                #yoffset = min(iy, imgsize[1] - iy, imgsize[1] / 4)             #change (1/4) to change the zoom step size
+                #xoffset1=min(float(xoffset)/float(imgsize[0]),float(yoffset)/float(imgsize[1]))*imgsize[0]
+                #yoffset1 = min(float(xoffset)/float(imgsize[0]), float(yoffset)/float(imgsize[1])) * imgsize[1]
+                #rect = QRect(ix-xoffset1, iy-yoffset1, 2*xoffset1, 2*yoffset1)
+                self.xlist.append(xcorner)
+                self.ylist.append(ycorner)
+                self.pixmap = self.pixmap.copy(rect)
+                #self.xbox.append(self.pixmap.width())
+                #self.ybox.append(self.pixmap.height())
+
+
+        #self.zoom_scale_x= float(self.pixmap.width())/float(self.cam_controller.framewidth)  #ratio of the displayed image to the original image
+        #self.zoom_scale_y=float(self.pixmap.height())/float(self.cam_controller.frameheight)  #inequality in zoom_scale_x and zoom_scale_y may indicate that the image is zoomed to very few pixels
         #print(self.zoom_scale_x)
         #print(self.zoom_scale_y)
         if self.section_xctr != 0 and self.section_yctr != 0 and self.checkBoxCrosshair.isChecked():
-            if len(self.loclist) == 0:
-                self.draw_crosshair_unzoom(self.section_xctr,self.section_yctr)
-            else:
-                self.draw_crosshair_zoom(self.section_xctr0, self.section_yctr0)
+            self.draw_crosshair(self.mouse_x,self.mouse_y)
         self.labelImage.setPixmap(self.pixmap)
 
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
@@ -256,26 +275,17 @@ class Ui_CustomWindow(Ui_MainWindow):
         # qim.setColorTable(gray_color_table)
         return qim.copy() if copy else qim
 
-    def draw_crosshair_unzoom(self,xcenter,ycenter):
+    def draw_crosshair(self,mouse_x,mouse_y):
+        label_width = self.labelImage.size().width()
+        label_height = self.labelImage.size().height()
         painter = QtGui.QPainter(self.pixmap)
         pen = QtGui.QPen()
         pen.setWidth(20)
-        pen.setColor(QtGui.QColor('blue'))
+        pen.setColor(QtGui.QColor('green'))
         painter.setPen(pen)
         painter.setOpacity(0.4)
-        painter.drawLine(xcenter,0,xcenter,3000)
-        painter.drawLine(0,ycenter,4000,ycenter)
-        painter.end()
-
-    def draw_crosshair_zoom(self,xcenter,ycenter):
-        painter = QtGui.QPainter(self.pixmap)
-        pen = QtGui.QPen()
-        pen.setWidth(20)
-        pen.setColor(QtGui.QColor('blue'))
-        painter.setPen(pen)
-        painter.setOpacity(0.4)
-        painter.drawLine(xcenter*round(self.pixmap.width()/4000),0,xcenter*round(self.pixmap.width()/4000),self.pixmap.height())
-        painter.drawLine(0,ycenter*round(self.pixmap.height()/3000),self.pixmap.width(),ycenter*round(self.pixmap.height()/3000))
+        painter.drawLine((mouse_x*self.pixmap.width())/label_width,0,(mouse_x*self.pixmap.width())/label_width,self.pixmap.height())
+        painter.drawLine(0,(mouse_y*self.pixmap.height())/label_height,self.pixmap.width(),(mouse_y*self.pixmap.height())/label_height)
         painter.end()
 
     def set_exptime(self):
@@ -283,21 +293,61 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))
 
     def label_mousepress(self):
+
         def mousepress(eventQMouseEvent):
             label_width = self.labelImage.size().width()
             label_height = self.labelImage.size().height()
-            mouse_x = eventQMouseEvent.pos().x()
-            mouse_y = eventQMouseEvent.pos().y()
+            self.mouse_x = eventQMouseEvent.pos().x()
+            self.mouse_y = eventQMouseEvent.pos().y()
             if len(self.loclist) == 0:
-                self.section_xctr = round(self.cam_controller.framewidth*mouse_x/label_width)
-                self.section_yctr = round(self.cam_controller.frameheight*mouse_y/label_height)
+                self.section_xctr = round(self.cam_controller.framewidth * self.mouse_x / label_width)
+                self.section_yctr = round(self.cam_controller.frameheight * self.mouse_y / label_height)
             else:
-                self.section_xctr = round(2*self.xoffset1*mouse_x/label_width + self.ix-self.xoffset1)
-                self.section_yctr = round(2*self.yoffset1*mouse_y/label_height + self.iy-self.yoffset1)
-                self.section_xctr0 = round(self.cam_controller.framewidth*mouse_x/label_width)
-                self.section_yctr0 = round(self.cam_controller.frameheight*mouse_y/label_height)
+                self.section_xctr = round(self.pixmap.width()* self.mouse_x / label_width)
+                self.section_yctr = round(self.pixmap.height()*self.mouse_y/label_height)
+                for i in range(len(self.loclist)):
+                    self.section_xctr += self.xlist[len(self.xlist)-i-1]
+                    self.section_yctr += self.ylist[len(self.ylist)-i-1]
             self.lineEditSectionX.setText(str(self.section_xctr))
             self.lineEditSectionY.setText(str(self.section_yctr))
+
+
+        # def mousepress(eventQMouseEvent):
+        #     label_width = self.labelImage.size().width()
+        #     label_height = self.labelImage.size().height()
+        #     self.mouse_x = eventQMouseEvent.pos().x()
+        #     self.mouse_y = eventQMouseEvent.pos().y()
+        #     self.section_xctr = round(self.cam_controller.framewidth * self.mouse_x / label_width)
+        #     self.section_yctr = round(self.cam_controller.frameheight*self.mouse_y/label_height)
+        #
+        #     if len(self.loclist) == 0:
+        #         self.lineEditSectionX.setText(str(self.section_xctr))
+        #         self.lineEditSectionY.setText(str(self.section_yctr))
+        #     else:
+        #         self.section_xctr_pseudo = round(self.pixmap.width()* self.mouse_x / label_width)
+        #         self.section_yctr_pseudo = round(self.pixmap.height()*self.mouse_y/label_height)
+        #         for i in range(len(self.loclist)):
+        #                 self.section_xctr_pseudo += self.xlist[len(self.xlist)-i-1]
+        #                 self.section_yctr_pseudo += self.ylist[len(self.ylist)-i-1]
+        #         self.lineEditSectionX.setText(str(self.section_xctr_pseudo))
+        #         self.lineEditSectionY.setText(str(self.section_yctr_pseudo))
+
+
+            # if len(self.loclist) == 0:
+            #     self.section_xctr = round(self.cam_controller.framewidth*self.mouse_x/label_width)
+            #     self.section_yctr = round(self.cam_controller.frameheight*self.mouse_y/label_height)
+            # else:
+            #     self.section_xctr = round(self.pixmap.width()*self.mouse_x/label_width)
+            #     self.section_yctr = round(self.pixmap.height()*self.mouse_y/label_height)
+            #     for i in range(len(self.loclist)):
+            #         self.section_xctr += self.xlist[i]
+            #         self.section_yctr += self.ylist[i]
+            #         print(str(self.xlist[i]))
+            #         print(str(self.ylist[i]))
+            # self.lineEditSectionX.setText(str(self.section_xctr))
+            # self.lineEditSectionY.setText(str(self.section_yctr))
+
+
             if self.checkBoxFit.isChecked():
                 self.update_plot()
             else:
@@ -312,7 +362,10 @@ class Ui_CustomWindow(Ui_MainWindow):
                 self.zoom_x = float(self.zoom_x)*self.cam_controller.framewidth/(2*self.labelImage.size().width())  # scaling from mouse position to display position
                 self.zoom_y = float(self.zoom_y)*self.cam_controller.frameheight/(2*self.labelImage.size().height())
                 if event.angleDelta().y() > 0:
-                    self.target_scale += 1
+                    if self.target_scale < 5:
+                        self.target_scale += 1
+                    else:
+                        print('Reached Zoom Limit!')
                 else:
                     self.target_scale -= 1
                 self.update_movie()

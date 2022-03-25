@@ -21,7 +21,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d178d14d-3b69-482d-8d87-f35664f85a0b" name="Default Changelist" comment="1d fitting finished, not using moment fit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlirWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlirWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FlirWindowModify.py" beforeDir="false" afterPath="$PROJECT_DIR$/FlirWindowModify.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,7 +50,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python&#10;TEXT" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/start.py" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -63,15 +62,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.start">
-    <configuration name="cam" type="BatchConfigurationType" factoryName="Batch" temporary="true">
-      <module name="myapp" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Programming\FlirCamera" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="cam.bat" />
-      <option name="PARAMETERS" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="FlirCamController" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myapp" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -135,6 +125,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="myapp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="start" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="myapp" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -161,10 +172,12 @@
       <item itemvalue="Python.laserbeamsizefromimage" />
       <item itemvalue="Python.start" />
       <item itemvalue="Python.ImageAnalysis" />
+      <item itemvalue="Python.scratch" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.start" />
+        <item itemvalue="Python.scratch" />
         <item itemvalue="Python.ImageAnalysis" />
         <item itemvalue="Python.FlirCamController" />
         <item itemvalue="Python.laserbeamsizefromimage" />
@@ -216,29 +229,29 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@0.0.1920.1040" timestamp="1647969921013" />
-    <state width="1259" height="274" key="GridCell.Tab.0.bottom" timestamp="1648141882540">
+    <state width="1259" height="274" key="GridCell.Tab.0.bottom" timestamp="1648166931193">
       <screen x="-1280" y="47" width="1280" height="984" />
     </state>
     <state width="2027" height="248" key="GridCell.Tab.0.bottom/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@-2048.0.2048.1112" timestamp="1646708250001" />
-    <state width="1259" height="274" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648141882540" />
+    <state width="1259" height="274" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648166931193" />
     <state width="1899" height="274" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@0.0.1920.1040" timestamp="1648015888040" />
-    <state width="1259" height="274" key="GridCell.Tab.0.center" timestamp="1648141882540">
+    <state width="1259" height="274" key="GridCell.Tab.0.center" timestamp="1648166931193">
       <screen x="-1280" y="47" width="1280" height="984" />
     </state>
     <state width="2027" height="248" key="GridCell.Tab.0.center/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@-2048.0.2048.1112" timestamp="1646708250001" />
-    <state width="1259" height="274" key="GridCell.Tab.0.center/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648141882540" />
+    <state width="1259" height="274" key="GridCell.Tab.0.center/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648166931193" />
     <state width="1899" height="274" key="GridCell.Tab.0.center/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@0.0.1920.1040" timestamp="1648015888040" />
-    <state width="1259" height="274" key="GridCell.Tab.0.left" timestamp="1648141882540">
+    <state width="1259" height="274" key="GridCell.Tab.0.left" timestamp="1648166931193">
       <screen x="-1280" y="47" width="1280" height="984" />
     </state>
     <state width="2027" height="248" key="GridCell.Tab.0.left/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@-2048.0.2048.1112" timestamp="1646708250001" />
-    <state width="1259" height="274" key="GridCell.Tab.0.left/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648141882540" />
+    <state width="1259" height="274" key="GridCell.Tab.0.left/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648166931193" />
     <state width="1899" height="274" key="GridCell.Tab.0.left/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@0.0.1920.1040" timestamp="1648015888040" />
-    <state width="1259" height="274" key="GridCell.Tab.0.right" timestamp="1648141882540">
+    <state width="1259" height="274" key="GridCell.Tab.0.right" timestamp="1648166931193">
       <screen x="-1280" y="47" width="1280" height="984" />
     </state>
     <state width="2027" height="248" key="GridCell.Tab.0.right/-2048.0.2048.1112/1920.0.2048.1112/0.0.1920.1040@-2048.0.2048.1112" timestamp="1646708250001" />
-    <state width="1259" height="274" key="GridCell.Tab.0.right/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648141882540" />
+    <state width="1259" height="274" key="GridCell.Tab.0.right/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648166931193" />
     <state width="1899" height="274" key="GridCell.Tab.0.right/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@0.0.1920.1040" timestamp="1648015888040" />
     <state width="1259" height="315" key="GridCell.Tab.1.bottom" timestamp="1648139747871">
       <screen x="-1280" y="47" width="1280" height="984" />
@@ -260,10 +273,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="822" y="23" key="SettingsEditor/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@0.0.1920.1040" timestamp="1647982139623" />
-    <state x="241" y="61" width="1421" height="697" maximized="true" key="dock-window-1" timestamp="1648141522940">
+    <state x="241" y="61" width="1421" height="697" maximized="true" key="dock-window-1" timestamp="1648148445962">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="241" y="61" width="1421" height="697" maximized="true" key="dock-window-1/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648141522940" />
+    <state x="241" y="61" width="1421" height="697" maximized="true" key="dock-window-1/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@-1280.47.1280.984" timestamp="1648148445962" />
     <state x="-1575" y="213" width="1421" height="697" maximized="true" key="dock-window-1/0.0.1920.1040/1920.109.1920.1040/-1280.47.1280.984@0.0.1920.1040" timestamp="1647971953953" />
     <state x="1935" y="109" width="1421" height="697" maximized="true" key="dock-window-2" timestamp="1647977126426">
       <screen x="1920" y="109" width="1920" height="1040" />
