@@ -2,7 +2,8 @@ if __name__ == '__main__':
     import imageio
     import matplotlib.pyplot as plt
     import laserbeamsize as lbs
-    beam = imageio.imread("test_image1.jpg")
+    #beam = imageio.imread("test_image1.jpg")
+    beam= imageio.imread("IndividualAddressingPics/After_x8_BeamExpander_1_4_18_2022.jpg")
     x, y, dx, dy, phi = lbs.beam_size(beam)
     print("The center of the beam ellipse is at (%.0f, %.0f)" % (x, y))
     print("The ellipse diameter (closest to horizontal) is %.0f um" % (dx*1.85))

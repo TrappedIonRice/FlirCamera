@@ -280,7 +280,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         label_height = self.labelImage.size().height()
         painter = QtGui.QPainter(self.pixmap)
         pen = QtGui.QPen()
-        pen.setWidth(20)
+        pen.setWidth(10) #reduced width of crosshair from 20 to 10
         pen.setColor(QtGui.QColor('green'))
         painter.setPen(pen)
         painter.setOpacity(0.4)
