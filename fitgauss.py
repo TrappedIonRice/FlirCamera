@@ -1,7 +1,6 @@
 import numpy as np
 import time
-from scipy import optimize
-
+from scipy import optimize,signal
 
 class Parameter:
     def __init__(self, value):
@@ -67,34 +66,36 @@ def find_startpar_gauss(x, prof):
     @return: [A, mu, sigma, offset]
     """
 
-    Nsh = 20  # number (half) of points for smoothing
+    Nsh = 20   # number (half) of points for smoothing. Needs to be even no. Choose according to feature that needs to be resolved
     gs = Nsh / 2  # width gaussian
 
-    # use gaussian for smoothing
+    # use normalized gaussian for smoothing
     gx = np.arange(2 * Nsh + 1) - Nsh
     gy = np.exp(-gx ** 2 / gs ** 2)
     gy /= gy.sum()
 
-    # smooth profil, limit axes to valid values
-    profsmooth = np.convolve(prof, gy, mode='valid')
+    # smooth profile, limit axes to valid values
+    profsmooth = np.convolve(prof, gy, mode='valid')  #reduced in length by 2Nsh
+    #profsmooth = signal.savgol_filter(prof,Nsh,Nsh/2) #adj, Nsh is the window
+    #profsmooth =profsmooth[Nsh:-Nsh] # adj
     xs = x[Nsh:-Nsh]
 
     # estimate peak position and fwhm width
     peakval, peakpos = pickpeak(profsmooth, 1)
 
+    off = np.nanmin(profsmooth)  # TODO: can we do better (robust?)
     try:
         halfval, halfpos = pickpeak(
-            -np.abs(profsmooth - (peakval + np.nanmin(profsmooth)) / 2.0),
+            -np.abs(profsmooth - (peakval + off) / 2.0),
             npicks=2)
         width = np.abs(np.diff(xs[halfpos]))
     except:
         print("Warning: can't determine initial guess for width", sys.exc_info())
         width = 20
 
-    off = np.nanmin(profsmooth)  # TODO: can we do better (robust?)
     try:
         m = xs[peakpos]
-    except IndexError:
+    except IndexError:  # clearly a known error that forces the scipy.optimize.leastsq to evaluate needlessly
         m = 0.5 * (x[0] + x[-1])
 
     s = width
@@ -121,6 +122,8 @@ def find_startpar_gauss(x, prof):
         return v-v0
 
     fitpar = optimize.leastsq(gauss1d,startpars,args = (x, prof))
+
+
     # else:
     #     fitpar = LM.LM(self.fJgauss1d,
     #                    startpars,
@@ -176,8 +179,8 @@ def fitgauss1d(xx, zz, truncate=True):
     # prep_sigma = xx[zz > (height() * np.exp(-1 / 2)) + background()]
     # sigma = Parameter(abs(prep_sigma[-1] - prep_sigma[0]) / 2)
 
-    def f(x):
-        return height() * np.exp(-((x - mu()) / sigma()) ** 2 / 2) + background()
+    #def f(x):
+    #    return height() * np.exp(-((x - mu()) / sigma()) ** 2 / 2) + background()
     #fitresults=fit(f, [mu, sigma, height, background], zz, x=xx) old bad function
     #print("Newfit = ",find_startpar_gauss(xx,zz))
     return find_startpar_gauss(xx,zz)
@@ -222,6 +225,7 @@ def truncate_center(xx, yy):
     '''
     x0 = np.sum(xx * yy) / np.sum(yy)
     xx0 = []
+
     while not np.array_equal(xx0, xx):
         xx0 = xx
         if x0 - xx0[0] < xx0[-1] - x0:
@@ -257,12 +261,15 @@ def fitgauss2d_section(xx, yy, zz):
     ier: int
         An integer flag. It equals to 1 if everything was fine.
     '''
-    fit_int_x = fitgauss1d(xx, zz.sum(axis=0))
-    fit_int_y = fitgauss1d(yy, zz.sum(axis=1))
+#    fit_int_x = fitgauss1d(xx, zz.sum(axis=0))
+#    fit_int_y = fitgauss1d(yy, zz.sum(axis=1))
+    fit_int_x = fitgauss1d(xx, np.nanmax(zz,axis=0))      #adj
+    fit_int_y = fitgauss1d(yy, np.nanmax(zz,axis=1))      #adj
     # print(fit_int_x)
     # print(fit_int_y)
     # fit_x = fitgauss1d(xx, zz[np.min(np.abs(yy - fit_int_y[0][0])) == np.abs(yy - fit_int_y[0][0]), ::].flatten())
     # fit_y = fitgauss1d(yy, zz[::, np.min(np.abs(xx - fit_int_x[0][0])) == np.abs(xx - fit_int_x[0][0])].flatten())
+    #print('\n',fit_int_y[0][0]) #debugging
     fit_x = fitgauss1d(xx, zz[round(fit_int_y[0][0]), ::])
     fit_y = fitgauss1d(yy, zz[::, round(fit_int_x[0][0])])
 
@@ -287,7 +294,8 @@ def fitguase2d_int():
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
     import cv2
-    data = cv2.imread("test_image1.jpg")
+   # data = cv2.imread("test_image.jpg")
+    data=cv2.imread(r'C:\Software Programming RiceYb\FlirCamera\IndividualAddressingPics\After_x8_BeamExpander_1_4_18_2022.jpg')
     lx, ly, lz = data.shape
     print(data.shape)
     xx = np.arange(lx)
@@ -297,12 +305,12 @@ if __name__ == '__main__':
     #print(xx.shape,yy.shape, zz.shape)
 
     start_time = time.time()
-    for i in range(1):
-        fitgauss2d_section(np.arange(0, ly), np.arange(0, lx), zz)
+    #for i in range(1):
+    #    fitgauss2d_section(np.arange(0, ly), np.arange(0, lx), zz)
     print("--- %.8f seconds ---" % (time.time() - start_time))
-    #print(fitgauss2d_section(np.arange(0, ly), np.arange(0, lx), zz))
+    print(fitgauss2d_section(np.arange(0, ly), np.arange(0, lx), zz))
 
-
+    [par,ier]=fitgauss2d_section(np.arange(0, ly), np.arange(0, lx), zz) # fitting parameters adj
 
 
 
@@ -312,29 +320,41 @@ if __name__ == '__main__':
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    #surf = ax.plot_surface(xx, yy, zz, cmap=cm.coolwarm, linewidth=0, antialiased=True)
-    #xx,yy = np.meshgrid(np.arange(4000),np.arange(3000))
-    #zz = (gauss2d(1000, 1000, 100, 400, 1, 0, xx, yy) + 1 + np.random.rand(*(xx.shape)) * 0.5)*100
-
     surf = ax.plot_surface(xx, yy, zz, cmap=cm.coolwarm, linewidth=0, antialiased=True)
+    xx,yy = np.meshgrid(np.arange(4000),np.arange(3000))
+    #zz = (gauss2d(1000, 1000, 100, 400, 1, 0, xx, yy) + 1 + np.random.rand(*(xx.shape)) * 0.5)*100
+    fit_Xzz=np.zeros(zz.shape)
+    fit_Yzz=np.zeros(zz.shape)
+    for i in range(lx):
+        fit_Xzz[i,:]= gauss1d(par[1], par[3], par[5], yy[i,0])#* gauss1d(par[1], par[3], par[5], xx[0,j])  # no offset
+            #print(gauss1d(par[0], par[2], par[4], yy[i,0]))#* gauss1d(par[1], par[3], par[5], xx[0,j]))
+    for j in range(ly):
+        fit_Yzz[:,j] = gauss1d(par[0], par[2], par[4], xx[0,j])
+    surf2 = ax.plot_surface(xx, yy, fit_Xzz, cmap=cm.coolwarm, linewidth=0, antialiased=True)
+    surf3= ax.plot_surface(xx, yy, fit_Yzz, cmap=cm.hot, linewidth=0, antialiased=True)
+    ax.set_xlabel('yy: 0-4000')
+    ax.set_ylabel('xx: 0-3000')
+
     plt.show()
 
-    # xx = np.arange(0, 4000, 1) * 0.57
-    # yy = gauss1d(1000, 200, 1, xx) + 1 + np.random.rand(xx.size) * 0.5
-    # plt.plot(xx, yy)
-    # plt.show()
-    # x0, sigma = fitgauss1d_moment(xx, yy)
-    # print(x0, sigma)
-    # result = fitgauss1d(xx, yy)
-    # print(result)
+'''
+     xx = np.arange(0, 4000, 1) * 0.57
+     yy = gauss1d(1000, 200, 1, xx) + 1 + np.random.rand(xx.size) * 0.5
+     plt.plot(xx, yy)
+     plt.show()
+     x0, sigma = fitgauss1d_moment(xx, yy)
+     print(x0, sigma)
+     result = fitgauss1d(xx, yy)
+     print(result)
 
-    # start_time = time.time()
-    # for i in range(1000):
-    #     x0, sigma = fitgauss1d_moment(xx, yy)
-    # print("--- %.8f seconds ---" % (time.time() - start_time))
-    # print(x0,sigma)
-    # start_time = time.time()
-    # for i in range(1000):
-    #     result = fitgauss1d(xx, yy)
-    # print("--- %.8f seconds ---" % (time.time() - start_time))
-    # print(result)
+     start_time = time.time()
+     for i in range(1000):
+         x0, sigma = fitgauss1d_moment(xx, yy)
+     print("--- %.8f seconds ---" % (time.time() - start_time))
+     print(x0,sigma)
+     start_time = time.time()
+     for i in range(1000):
+         result = fitgauss1d(xx, yy)
+     print("--- %.8f seconds ---" % (time.time() - start_time))
+     print(result)
+'''
