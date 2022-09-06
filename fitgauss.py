@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import time
 from scipy import optimize,signal
@@ -66,7 +67,7 @@ def find_startpar_gauss(x, prof):
     @return: [A, mu, sigma, offset]
     """
 
-    Nsh = 20   # number (half) of points for smoothing. Needs to be even no. Choose according to feature that needs to be resolved
+    Nsh = 20  # number (half) of points for smoothing. Needs to be even no. Choose according to feature that needs to be resolved
     gs = Nsh / 2  # width gaussian
 
     # use normalized gaussian for smoothing
@@ -295,7 +296,7 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     import cv2
    # data = cv2.imread("test_image.jpg")
-    data=cv2.imread(r'C:\Software Programming RiceYb\FlirCamera\IndividualAddressingPics\After_x8_BeamExpander_1_4_18_2022.jpg')
+    data=cv2.imread(r'C:\Software Programming RiceYb\FlirCamera\IndividualAddressingPics\.jpg')
     lx, ly, lz = data.shape
     print(data.shape)
     xx = np.arange(lx)

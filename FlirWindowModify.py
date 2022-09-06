@@ -58,7 +58,8 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.pushButtonContinue.clicked.connect(self.start_continue)
 
         # init exposure time line edit
-        self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))
+        #self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))                     #uses value from the previous time it was used
+        self.lineEditExposureTime.setText(str(10))                         #to avoid damaging the camera with high intensity, defulat exposure time is set ot minimum
         self.lineEditExposureTime.returnPressed.connect(self.set_exptime)
 
         # init section plots
@@ -211,7 +212,8 @@ class Ui_CustomWindow(Ui_MainWindow):
         #print(self.zoom_scale_y)
         if self.section_xctr != 0 and self.section_yctr != 0 and self.checkBoxCrosshair.isChecked():
             self.draw_crosshair(self.mouse_x,self.mouse_y)
-        self.labelImage.setPixmap(self.pixmap)
+      #  self.labelImage.setPixmap(self.pixmap)
+        self.labelImage.setPixmap(self.pixmap.scaled(4000,3000))  # helps to see pixelation with maximum zoom
 
         # plt.plot(self.cam_controller.frame[round(p[1]),::])
         # plt.plot(gauss1d(p[0],p[2],p[4],np.arange(0, self.cam_controller.frame.shape[1]))+p[5])
@@ -280,7 +282,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         label_height = self.labelImage.size().height()
         painter = QtGui.QPainter(self.pixmap)
         pen = QtGui.QPen()
-        pen.setWidth(5) #reduced width of crosshair from 20 to 5
+        pen.setWidth(1) #reduced width of crosshair from 20 to 5
         pen.setColor(QtGui.QColor('green'))
         painter.setPen(pen)
         painter.setOpacity(0.4)
@@ -362,7 +364,7 @@ class Ui_CustomWindow(Ui_MainWindow):
                 self.zoom_x = float(self.zoom_x)*self.cam_controller.framewidth/(2*self.labelImage.size().width())  # scaling from mouse position to display position
                 self.zoom_y = float(self.zoom_y)*self.cam_controller.frameheight/(2*self.labelImage.size().height())
                 if event.angleDelta().y() > 0:
-                    if self.target_scale < 5:
+                    if self.target_scale < 8:
                         self.target_scale += 1
                     else:
                         print('Reached Zoom Limit!')

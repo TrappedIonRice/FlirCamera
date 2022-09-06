@@ -39,7 +39,6 @@ class FlirCamController:
         else:
             # Choose the first camera
             self.cam = self.cam_list[0]
-
             # Initialize camera
             self.cam.Init()
 
@@ -319,7 +318,6 @@ class FlirCamController:
             if self.cam.ExposureTime.GetAccessMode() != PySpin.RW:
                 self.update_log('Unable to set exposure time. Aborting...')
                 return False
-
             # Ensure desired exposure time does not exceed the maximum
             exposure_time = min(self.cam.ExposureTime.GetMax(), exposure_time)
             exposure_time = max(self.cam.ExposureTime.GetMin(), exposure_time)
