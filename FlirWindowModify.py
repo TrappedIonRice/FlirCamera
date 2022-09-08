@@ -32,6 +32,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.section_ycoord = []
         self.save_dir = os.getcwd()
         self.unit = 0
+        self.iter = -1
 
         self.loclist = []
         self.zoom_x = 0
@@ -47,9 +48,9 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.line_edit_multi_fits()
         # self.lineEditMultiFits.stateChanged.connect(self.line_edit_multi_fits)
 
-        self.slices = 30
-        self.lineEditSlices.setText('30')
-        self.line_edit_slices()
+        self.slices = 40
+        # self.lineEditSlices.setText('40')
+        # self.line_edit_slices()
 
         # Data for the fitted gaussian
         self.section_xdata_fit = []
@@ -81,7 +82,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.plotx.setObjectName("plotx")
         self.gridLayoutImage.addWidget(self.plotx, 1, 0, 1, 1)
 
-        self.colors = [(np.random.randint(0, 256), np.random.randint(0, 256), np.random.randint(0, 256))
+        self.colors = [(np.random.randint(100, 256), np.random.randint(100, 256), np.random.randint(100, 256))
                        for _ in range(self.num_fits)]
 
         self.sectionx_fit = self.plotx.plot(self.section_xcoord, self.section_xdata_fit,
@@ -136,6 +137,10 @@ class Ui_CustomWindow(Ui_MainWindow):
         # Image label mouse scroll event?
         self.labelImage.wheelEvent = self.label_mousewheel()
 
+        # Zoom rectangle
+        self.rect = QRect(0, 0, self.cam_controller.framewidth, self.cam_controller.frameheight)
+        self.zoom_needed = False
+
         # auto exposure check box
         self.checkbox_auto_exposure()
         self.checkBoxAutoExposure.stateChanged.connect(self.checkbox_auto_exposure)
@@ -164,6 +169,8 @@ class Ui_CustomWindow(Ui_MainWindow):
         # center logging
         self.start_date = str(datetime.datetime.now()).replace(':', '-')
         self.start_time = time.time()
+        if not os.path.exists('center_log'):
+            os.makedirs('center_log')
         with open('center_log/' + self.start_date + '.txt', 'w') as f:
             f.write('time, x0, y0, x1, y1...\n')
 
@@ -175,6 +182,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         # self.t0 = time.time()
         self.update_timer.start(500)
         # print('click')
+        self.iter = 0
 
     def stop_continue(self):
         self.update_timer.stop()
@@ -189,73 +197,67 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.cam_controller.acquire_continue()
         if self.checkBoxFit.isChecked():
             self.line_edit_multi_fits()
-            self.line_edit_slices()
-            if self.num_fits <= 1:
+            # self.line_edit_slices()
+            if self.num_fits <= 1 or self.iter <= 0:
                 self.p, self.ier = fitgauss2d_section(np.arange(0, self.cam_controller.frame.shape[1]),
                                             np.arange(0, self.cam_controller.frame.shape[0]), self.cam_controller.frame)
-                self.update_plot()
-                # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
-                self.lineEditxCenter.setText('%.1f' % (self.p[0]))
-                self.lineEdityCenter.setText('%.1f' % (self.p[1]))
-                self.lineEditxWaist.setText('%.1f' % (self.p[2] * 2*self.unit))
-                self.lineEdityWaist.setText('%.1f' % (self.p[3] * 2*self.unit))
-                self.lineEditHeight.setText('%.1f' % (self.p[4]))
+                if self.num_fits <= 1:
+                    self.update_plot()
+                    # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
+                    if self.lineEditxCenter.parent() is not None:
+                        self.lineEditxCenter.setText('%.1f' % (self.p[0]))
+                        self.lineEdityCenter.setText('%.1f' % (self.p[1]))
+                        self.lineEditxWaist.setText('%.1f' % (self.p[2] * 2*self.unit))
+                        self.lineEdityWaist.setText('%.1f' % (self.p[3] * 2*self.unit))
+                        self.lineEditHeight.setText('%.1f' % (self.p[4]))
+                    else:
+                        self.update_param_displays()
+
+                if self.iter <= 0:
+                    if self.p[2] < self.cam_controller.framewidth / self.slices and \
+                            self.p[3] < self.cam_controller.frameheight / self.slices:
+                        self.zoom_needed = True
+                        self.plainTextEditLog.insertPlainText(
+                            'Please zoom in to the features for multiple logging to work\n')
+                    else:
+                        self.zoom_needed = False
             else:
-                self.p = fitgauss2d_multiple(self.cam_controller.frame, np.arange(self.cam_controller.frame.shape[0]),
-                                             np.arange(self.cam_controller.frame.shape[1]), num_fits=self.num_fits,
-                                             slices=self.slices)
+                if not self.zoom_needed:
+                    self.p = fitgauss2d_multiple(self.cam_controller.frame, np.arange(self.cam_controller.frame.shape[0]),
+                                                 np.arange(self.cam_controller.frame.shape[1]), num_fits=self.num_fits,
+                                                 slices=self.slices)
+                else:
+                    self.p = fitgauss2d_multiple(self.cam_controller.frame[self.rect.top():self.rect.bottom() + 1,
+                                                 self.rect.left():self.rect.right() + 1], np.arange(self.rect.height()),
+                                                 np.arange(self.rect.width()), num_fits=self.num_fits,
+                                                 slices=self.slices)
+                    for i in range(len(self.p)):
+                        self.p[i][0] += self.rect.left()
+                        self.p[i][1] += self.rect.top()
+
                 self.update_plot()
-                # self.p =
-                # self.lineEditxCenter.setText(str(['%.1f' % (pars[0]) for pars in self.p]))
-                # self.lineEdityCenter.setText(str(['%.1f' % (pars[1]) for pars in self.p]))
-                # self.lineEditxWaist.setText(str(['%.1f' % (pars[2] * 2*self.unit) for pars in self.p]))
-                # self.lineEdityWaist.setText(str(['%.1f' % (pars[3] * 2*self.unit) for pars in self.p]))
-                # self.lineEditHeight.setText(str(['%.1f' % (pars[4]) for pars in self.p]))
 
-                self.gridLayoutFitResult.addLayout(self.param_label_layout, 0, 0, 1, 1)
-                self.gridLayoutFitResult.addLayout(self.param_layout, 0, 1, 1, 1)
-                self.lineEditxCenter.setParent(None)
-                self.lineEdityCenter.setParent(None)
-                self.lineEditxWaist.setParent(None)
-                self.lineEdityWaist.setParent(None)
-                self.lineEditHeight.setParent(None)
+                if self.lineEditxCenter.parent() is not None:
+                    self.gridLayoutFitResult.addLayout(self.param_label_layout, 0, 0, 1, 1)
+                    self.gridLayoutFitResult.addLayout(self.param_layout, 0, 1, 1, 1)
+                    self.lineEditxCenter.setParent(None)
+                    self.lineEdityCenter.setParent(None)
+                    self.lineEditxWaist.setParent(None)
+                    self.lineEdityWaist.setParent(None)
+                    self.lineEditHeight.setParent(None)
 
-                self.labelxCenter.setParent(None)
-                self.param_label_layout.addWidget(self.labelxCenter, 0, 0, 1, 1)
-                self.labelyCenter.setParent(None)
-                self.param_label_layout.addWidget(self.labelyCenter, 1, 0, 1, 1)
-                self.labelxWaist.setParent(None)
-                self.param_label_layout.addWidget(self.labelxWaist, 2, 0, 1, 1)
-                self.labelyWaist.setParent(None)
-                self.param_label_layout.addWidget(self.labelyWaist, 3, 0, 1, 1)
-                self.labelHeight.setParent(None)
-                self.param_label_layout.addWidget(self.labelHeight, 4, 0, 1, 1)
+                    self.labelxCenter.setParent(None)
+                    self.param_label_layout.addWidget(self.labelxCenter, 0, 0, 1, 1)
+                    self.labelyCenter.setParent(None)
+                    self.param_label_layout.addWidget(self.labelyCenter, 1, 0, 1, 1)
+                    self.labelxWaist.setParent(None)
+                    self.param_label_layout.addWidget(self.labelxWaist, 2, 0, 1, 1)
+                    self.labelyWaist.setParent(None)
+                    self.param_label_layout.addWidget(self.labelyWaist, 3, 0, 1, 1)
+                    self.labelHeight.setParent(None)
+                    self.param_label_layout.addWidget(self.labelHeight, 4, 0, 1, 1)
 
-                while self.num_fits > len(self.param_displays[0]):
-                    for i in range(5):
-                        self.param_displays[i].append(QtWidgets.QLabel(self.centralwidget))
-                        self.param_displays[i][-1].setFont(self.param_font)
-                        self.param_displays[i][-1].setObjectName("display" + self.param_labels[i] +
-                                                                 str(len(self.param_displays[i])))
-                        self.param_displays[i][-1].setStyleSheet('color: rgb(' +
-                                                                 str(self.colors[len(self.param_displays[i]) - 1][0])
-                                                                 + ', ' +
-                                                                 str(self.colors[len(self.param_displays[i]) - 1][1])
-                                                                 + ', ' +
-                                                                 str(self.colors[len(self.param_displays[i]) - 1][2])
-                                                                 + ');')
-                        self.param_layout.addWidget(self.param_displays[i][-1], i, len(self.param_displays[i]),
-                                                           1, 1)
-                while self.num_fits < len(self.param_displays[0]):
-                    for i in range(5):
-                        self.param_displays[i][-1].setText('')
-                        self.param_displays[i].pop(-1)
-                for i in range(5):
-                    for j in range(len(self.param_displays[i])):
-                        if 2 <= i <= 3:
-                            self.param_displays[i][j].setText('%.1f' % (self.p[j][i] * 2 * self.unit))
-                        else:
-                            self.param_displays[i][j].setText('%.1f' % self.p[j][i])
+                self.update_param_displays()
 
         else:
             self.update_plot_withoutfit()
@@ -265,8 +267,65 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.lineEdityWaist.setText('N/A')
             self.lineEditHeight.setText('N/A')
 
-        self.pixmap = QtGui.QPixmap(self.toQImage())
+        self.iter += 1
 
+        self.pixmap = QtGui.QPixmap(self.toQImage())
+        self.zoom()
+
+
+        #self.zoom_scale_x= float(self.pixmap.width())/float(self.cam_controller.framewidth)  #ratio of the displayed image to the original image
+        #self.zoom_scale_y=float(self.pixmap.height())/float(self.cam_controller.frameheight)  #inequality in zoom_scale_x and zoom_scale_y may indicate that the image is zoomed to very few pixels
+        #print(self.zoom_scale_x)
+        #print(self.zoom_scale_y)
+        if self.section_xctr != 0 and self.section_yctr != 0 and self.checkBoxCrosshair.isChecked():
+            self.draw_crosshair(self.mouse_x,self.mouse_y)
+        self.labelImage.setPixmap(self.pixmap)
+
+        # plt.plot(self.cam_controller.frame[round(p[1]),::])
+        # plt.plot(gauss1d(p[0],p[2],p[4],np.arange(0, self.cam_controller.frame.shape[1]))+p[5])
+        # plt.show()
+
+        if self.checkBoxAutoExposure.isChecked():
+            self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))
+
+    def update_param_displays(self, update_vals=True):
+        while self.num_fits > len(self.param_displays[0]):
+            for i in range(5):
+                self.param_displays[i].append(QtWidgets.QLabel(self.centralwidget))
+                self.param_displays[i][-1].setFont(self.param_font)
+                self.param_displays[i][-1].setObjectName("display" + self.param_labels[i] +
+                                                         str(len(self.param_displays[i])))
+                self.param_displays[i][-1].setStyleSheet('color: rgb(' +
+                                                         str(self.colors[len(self.param_displays[i]) - 1][0])
+                                                         + ', ' +
+                                                         str(self.colors[len(self.param_displays[i]) - 1][1])
+                                                         + ', ' +
+                                                         str(self.colors[len(self.param_displays[i]) - 1][2])
+                                                         + '); background-color: black')
+                self.param_layout.addWidget(self.param_displays[i][-1], i, len(self.param_displays[i]),
+                                            1, 1)
+        while self.num_fits < len(self.param_displays[0]):
+            for i in range(5):
+                self.param_displays[i][-1].setText('')
+                self.param_displays[i].pop(-1)
+        for i in range(5):
+            for j in range(len(self.param_displays[i])):
+                if update_vals:
+                    if 2 <= i <= 3:
+                        if self.num_fits > 1:
+                            self.param_displays[i][j].setText('%.1f' % (self.p[j][i] * 2 * self.unit))
+                        else:
+                            self.param_displays[i][j].setText('%.1f' % (self.p[i] * 2 * self.unit))
+                    else:
+                        if self.num_fits > 1:
+                            self.param_displays[i][j].setText('%.1f' % self.p[j][i])
+                        else:
+                            self.param_displays[i][j].setText('%.1f' % self.p[i])
+                else:
+                    self.param_displays[i][j].setText('N/A')
+
+    def zoom(self):
+        self.rect = QRect(0, 0, self.cam_controller.framewidth, self.cam_controller.frameheight)
         if self.target_scale <= 0:
             self.loclist = []
             self.xlist = []
@@ -311,22 +370,10 @@ class Ui_CustomWindow(Ui_MainWindow):
                 self.pixmap = self.pixmap.copy(rect)
                 #self.xbox.append(self.pixmap.width())
                 #self.ybox.append(self.pixmap.height())
-
-
-        #self.zoom_scale_x= float(self.pixmap.width())/float(self.cam_controller.framewidth)  #ratio of the displayed image to the original image
-        #self.zoom_scale_y=float(self.pixmap.height())/float(self.cam_controller.frameheight)  #inequality in zoom_scale_x and zoom_scale_y may indicate that the image is zoomed to very few pixels
-        #print(self.zoom_scale_x)
-        #print(self.zoom_scale_y)
-        if self.section_xctr != 0 and self.section_yctr != 0 and self.checkBoxCrosshair.isChecked():
-            self.draw_crosshair(self.mouse_x,self.mouse_y)
-        self.labelImage.setPixmap(self.pixmap)
-
-        # plt.plot(self.cam_controller.frame[round(p[1]),::])
-        # plt.plot(gauss1d(p[0],p[2],p[4],np.arange(0, self.cam_controller.frame.shape[1]))+p[5])
-        # plt.show()
-
-        if self.checkBoxAutoExposure.isChecked():
-            self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))
+                self.rect.setCoords(self.rect.x() + rect.x(), self.rect.y() + rect.y(), self.rect.x() + rect.right(),
+                                    self.rect.y() + rect.bottom())
+        self.plotx.setXRange(self.rect.left(), self.rect.right())
+        self.ploty.setYRange(self.rect.top(), self.rect.bottom())
 
     def update_plot_withoutfit(self):
         self.section_xcoord = np.arange(0, self.cam_controller.frame.shape[1])
@@ -348,8 +395,8 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.sectiony_fit_mult[i].setData(self.section_ydata_fit_mult[i], self.section_ycoord)
 
     def update_plot(self):
-        self.line_edit_multi_fits()
-        self.line_edit_slices()
+        # self.line_edit_multi_fits()
+        # self.line_edit_slices()
 
         self.section_xcoord = np.arange(0, self.cam_controller.frame.shape[1])
         self.section_xdata = self.cam_controller.frame[self.section_yctr,::]
@@ -366,24 +413,24 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.sectionx_fit.setData(self.section_xcoord, self.section_xdata_fit)
             self.section_xdata_fit_mult = [[] for _ in range(self.num_fits)]
             for i in range(len(self.sectionx_fit_mult)):
-                self.sectionx_fit_mult[i].setData(self.section_xcoord, [0 for _ in self.section_xcoord])
+                self.sectionx_fit_mult[i].setData([], [])
 
             self.section_ydata_fit = self.gauss_data(self.p[4], self.p[1], self.p[3], self.p[5], self.section_ycoord.shape[0])
             self.sectiony_fit.setData(self.section_ydata_fit, self.section_ycoord)
             self.section_ydata_fit_mult = [[] for _ in range(self.num_fits)]
             for i in range(len(self.sectiony_fit_mult)):
-                self.sectiony_fit_mult[i].setData([0 for _ in self.section_ycoord], self.section_ycoord)
+                self.sectiony_fit_mult[i].setData([], [])
         else:
             self.section_xdata_fit = []
-            self.sectionx_fit.setData(self.section_xcoord, [0 for _ in self.section_xcoord])
+            self.sectionx_fit.setData([], [])
             self.section_ydata_fit = []
-            self.sectiony_fit.setData([0 for _ in self.section_ycoord], self.section_ycoord)
+            self.sectiony_fit.setData([], [])
             self.section_xdata_fit_mult = [[] for _ in range(len(self.p))]
             for i in range(len(self.sectionx_fit_mult)):
-                self.sectionx_fit_mult[i].setData(self.section_xcoord, [0 for _ in self.section_xcoord])
+                self.sectionx_fit_mult[i].setData([], [])
             self.section_ydata_fit_mult = [[] for _ in range(len(self.p))]
             for i in range(len(self.sectiony_fit_mult)):
-                self.sectiony_fit_mult[i].setData([0 for _ in self.section_ycoord], self.section_ycoord)
+                self.sectiony_fit_mult[i].setData([], [])
             for fit_num in range(len(self.p)):
                 # print('test3')
                 # self.section_xdata_fit = (self.gauss_data(fit[4], fit[0], fit[2], fit[5], self.section_xcoord.shape[0]))
@@ -583,16 +630,22 @@ class Ui_CustomWindow(Ui_MainWindow):
             self.set_exptime()
 
     def line_edit_multi_fits(self):
-        if int(self.lineEditMultiFits.text()) > 0:
-            self.num_fits = int(self.lineEditMultiFits.text())
-        else:
-            self.num_fits = 1
+        try:
+            if int(self.lineEditMultiFits.text()) > 0:
+                self.num_fits = int(self.lineEditMultiFits.text())
+            else:
+                self.num_fits = 1
+        except ValueError:
+            self.plainTextEditLog.insertPlainText('Please enter an integer value for the number of fits\n')
 
-    def line_edit_slices(self):
-        if int(self.lineEditSlices.text()) > 0:
-            self.slices = int(self.lineEditSlices.text())
-        else:
-            self.slices = 30
+    # def line_edit_slices(self):
+    #     try:
+    #         if int(self.lineEditSlices.text()) > 0:
+    #             self.slices = int(self.lineEditSlices.text())
+    #         else:
+    #             self.slices = 40
+    #     except ValueError:
+    #         self.plainTextEditLog.insertPlainText('Please enter an integer value for the number of slices\n')
 
     def set_background(self):
         self.cam_controller.set_background()

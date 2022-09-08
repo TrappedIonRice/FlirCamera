@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import time
 from scipy import optimize,signal
@@ -90,7 +91,7 @@ def find_startpar_gauss(x, prof):
             npicks=2)
         width = np.abs(np.diff(xs[halfpos]))
     except:
-        print("Warning: can't determine initial guess for width", sys.exc_info())
+        # print("Warning: can't determine initial guess for width", sys.exc_info())
         width = 20
 
     try:
@@ -402,11 +403,15 @@ def detect_peaks(image, num_fits, slices, blacklist=()):
 
     # Average each peak (assumed to be in order from the sort) over all the slices
     horiz_peaks_condensed = []
+    peak_totals = [0 for _ in range(num_fits)]
     for i in range(slices):
         for j in range(min(num_fits, len(horiz_peaks[i]))):
             if len(horiz_peaks_condensed) <= j:
                 horiz_peaks_condensed.append(0)
-            horiz_peaks_condensed[j] += horiz_peaks[i][j] / slices
+            horiz_peaks_condensed[j] += horiz_peaks[i][j] * horiz_slices[i][horiz_peaks[i][j]] ** 2
+            peak_totals[j] += horiz_slices[i][horiz_peaks[i][j]] ** 2
+    for i in range(len(horiz_peaks_condensed)):
+        horiz_peaks_condensed[i] /= peak_totals[i]
 
     # Take one vertical slice for each horizontal peak found
     vert_slices = []
@@ -514,9 +519,7 @@ def fitgauss2d_multiple(image, xx, yy, num_fits, slices):
                 hwhm[1] = i
         return max(hwhm[0] + hwhm[1], 20)
 
-    # Bounds on the gaussian parameters to use when fitting
-    par_bounds = ([0, 0, 0.0001, 0.0001, 0, 0], [len(image) - 1, len(image[0]) - 1,
-                                                 len(image) / 2, len(image[0]) / 2, 255, 1])
+    min_val = int(np.nanmin(image))
 
     # Estimate for initial parameters
     guess = []
@@ -543,13 +546,21 @@ def fitgauss2d_multiple(image, xx, yy, num_fits, slices):
         guess[-1][3] = find_fwhm(image[peak[0], ::], peak[1]) / (2 * np.sqrt(2 * np.log(2)))
 
         # Calculate and store guess for the gaussian's height
-        guess[-1][4] = int(image[peak[0]][peak[1]])
+        try:
+            local_image = image[round(peak[0] - guess[-1][2]):round(peak[0] + guess[-1][2]),
+                                round(peak[1] - guess[-1][3]):round(peak[1] + guess[-1][3])]
+            guess[-1][4] = int(np.nanmax(local_image))
+            updated_peak = np.where(local_image == guess[-1][4])
+            guess[-1][0] = updated_peak[0][0] + round(peak[0] - guess[-1][2])
+            guess[-1][1] = updated_peak[1][0] + round(peak[1] - guess[-1][3])
+        except ValueError:
+            guess[-1][4] = int(image[peak[0]][peak[1]] * 1.5)
 
-        # Calculate and store guess for the floor
-        guess[-1][5] = int(max(min([min(row) for row in image]), 0))
+        # Guess for the floor
+        guess[-1][5] = min_val
 
         # Check if any peaks overlap too much, and remove (and store in rejected_peaks) and replace them if they do
-        for j in range(len(guess) - 1):
+        for j in range(len(guess) - 2, -1, -1):
             overlap = 2
             if (guess[j][0] - guess[j][2] * overlap < guess[-1][0] < guess[j][0] + guess[j][2] * overlap) and \
                     (guess[j][1] - guess[j][3] * overlap < guess[-1][1] < guess[j][1] + guess[j][3] * overlap) and\
@@ -591,22 +602,42 @@ def fitgauss2d_multiple(image, xx, yy, num_fits, slices):
 
     # Sort the guesses so the fits occur in a consistent order
     guess.sort()
+    # for gs in guess:
+    #     gs.insert(0, gs.pop(1))
+    #     gs.insert(2, gs.pop(3))
+    # return guess
 
-    # Put guess in two separate lists, so it can be repeatedly fit (separately) for the x and y cross-sections
-    fit = [[guess], [guess]]
+    p = []
+
     for i in range(len(guess)):
+        i %= len(guess)
 
-        # Fit in the x direction based on the x cross-section and most recent fit
-        fit[0].append(fitgauss1d_multiple_oneatatime(xx, fit[0][-1][i][0], image[::, round(fit[0][-1][i][1])][:],
-                                                     fit[0][-1], par_bounds[:], i, dir=-2))
+        local_bounds = ((max(round(guess[i][0] - guess[i][2] * 2.5), 0),
+                         min(round(guess[i][0] + guess[i][2] * 2.5), len(image[::, 0]))),
+                        (max(round(guess[i][1] - guess[i][2] * 2.5), 0),
+                         min(round(guess[i][1] + guess[i][2] * 2.5), len(image[0, ::]))))
+        local_image = image[local_bounds[0][0]:local_bounds[0][1], local_bounds[1][0]:local_bounds[1][1]]
 
-        # Fit in the y direction based on the y cross-section and most recent fit
-        fit[1].append(fitgauss1d_multiple_oneatatime(yy, fit[1][-1][i][1], image[round(fit[1][-1][i][0]), ::][:],
-                                                     fit[1][-1], par_bounds[:], i, dir=2))
-
-    # For the most recent fit, average together corresponding x and y parameters from each gaussian to merge the
-    # x and y cross-section fits
-    p = [[(fit[0][-1][i][j] + fit[1][-1][i][j]) / 2 for j in range(6)] for i in range(len(guess))]
+        try:
+            p.append(list(fitgauss2d_section(np.arange(local_image.shape[1]),
+                                             np.arange(local_image.shape[0]), local_image)[0]))
+            p[-1][0] += local_bounds[0][0]
+            p[-1][1] += local_bounds[1][0]
+            if p[-1][0] < 0 or p[-1][0] > len(image[::, 0]):
+                p[-1][0] = guess[-1][0]
+            if p[-1][1] < 0 or p[-1][1] > len(image[0, ::]):
+                p[-1][1] = guess[-1][1]
+            if p[-1][2] < guess[i][2] / 2 or p[-1][2] > guess[i][2] * 2:
+                p[-1][2] = guess[i][2]
+            if p[-1][3] < guess[i][3] / 2 or p[-1][3] > guess[i][3] * 2:
+                p[-1][3] = guess[i][3]
+            if p[-1][4] <= 0 or p[-1][4] > max([gs[4] * 2 for gs in guess]):
+                p[-1][4] = guess[i][4]
+            if p[-1][5] < 0 or p[-1][5] > min(max([gs[4] / 4 for gs in guess]), min_val * 3):
+                p[-1][5] = min_val
+        except (IndexError, TypeError) as e:
+            # print('Fitting failed for curve', i + 1, ':', e)
+            p.append(guess[i])
 
     # Sort the gaussian fits, so they are returned in a consistent order
     p.sort()
