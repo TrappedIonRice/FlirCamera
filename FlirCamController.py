@@ -1,5 +1,8 @@
+import tkinter
 import PySpin
+import pywin.dialogs.list
 from PyQt5.QtWidgets import QScrollBar
+from FlirCamSelector import ChoiceDialog
 from numpy import zeros, uint8
 
 class FlirCamController:
@@ -38,7 +41,22 @@ class FlirCamController:
             self.update_log('Not enough cameras!')
         else:
             # Choose the first camera
-            self.cam = self.cam_list[0]
+            # self.cam = self.cam_list[0]
+
+            # Choose cameras via serial number in a simple pop-up dialog box
+            # serial_list = ['19284652', '22129613']
+            # serial_index = pywin.dialogs.list.SelectFromList("Select camera via serial number:", serial_list)
+            # self.cam = self.cam_list.GetBySerial(serial_list[serial_index])
+
+            # Choose cameras via serial number in a FlirCamSelector pop-up dialog box
+            tk = tkinter.Tk()
+            tk.withdraw()
+            # List of all available working Flir Cameras at the lab
+            serial_list = ['19284652', '22129613']
+            dialog = ChoiceDialog(tk, 'Flir Camera Selector',
+                                  text='Choose the desired camera via its serial number: \n (ignore the ones that are not on)',
+                                  items=serial_list)
+            self.cam = self.cam_list.GetBySerial("{}".format(dialog.selection))
 
             # Initialize camera
             self.cam.Init()
