@@ -1,5 +1,6 @@
 .idea/workspace.xml
-__pycache__/
+__pycache__/**
 *.jpg
 *.jpeg
 *.png
+center_log/**
