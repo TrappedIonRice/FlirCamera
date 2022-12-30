@@ -6,7 +6,7 @@ import sys
 from PyQt5 import QtWidgets
 
 flir = FlirCamController()
-# flir = FakeCamController()  # use to test the program without a camera
+#flir = FakeCamController()  # use to test the program without a camera
 
 app = QtWidgets.QApplication(sys.argv)
 app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
