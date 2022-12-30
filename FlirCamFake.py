@@ -67,16 +67,22 @@ class FakeCamController:
         # image_data = (gauss2d(500, 800, 100, 400, 1, 0, xx, yy) + 1 + np.random.rand(*(xx.shape)) * 0.5)*50
         # image_data = (gauss2d_multiple(500, 200, 900, 800, 300, 400, 100, 50, 150, 400, 200, 50, 1, 0.7, 0.4, 0, 0, 0, x=xx, y=yy) + 1 + np.random.rand(*(xx.shape)) * 0.5) * 50
         # image_data = (gauss2d_multiple([[500, 800, 100, 400, 1, 0], [1400, 800, 50, 200, 0.7, 0], [600, 1200, 150, 50, 0.9, 0]], xx, yy) + 1 + np.random.rand(*(xx.shape)) * 0.5) * 50
-        image_data = (gauss2d_multiple([[500, 800, 100, 400, 1, 0], [1600, 800, 50, 200, 0.7, 0], [1100, 1200, 150, 50, 0.9, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50
         # image_data = (gauss2d_multiple([[500, 800, 100, 400, 1, 0], [1400, 800, 50, 200, 0.7, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50
+        # image_data = (gauss2d_multiple([[500, 800, 100, 400, 1, 0], [1600, 800, 50, 200, 0.7, 0], [1100, 1200, 150, 50, 0.9, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50
+        # image_data = (gauss2d_multiple([[1050, 1080, 10, 40, 1, 0], [1160, 1080, 5, 20, 0.7, 0], [1110, 1120, 15, 5, 0.9, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50
+        # image_data = (gauss2d_multiple([[960, 780, 10, 15, 1, 0], [1040, 720, 5, 10, 0.7, 0], [960, 720, 15, 5, 0.9, 0], [1040, 780, 10, 10, 0.8, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50
+        image_data = (gauss2d_multiple([[960, 780, 10, 15, 1, 0], [1040, 720, 5, 10, 0.7, 0], [960, 720, 15, 5, 0.9, 0], [1040, 780, 10, 10, 0.8, 0], [1120, 720, 12, 8, 0.9, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50
         if self.average_frames > 1:
             image_data = image_data/self.average_frames
             for i in range(self.average_frames - 1):
                 # image_data += ((gauss2d(500, 800, 100, 400, 1, 0, xx, yy) + 1 + np.random.rand(*(xx.shape)) * 0.5)*50) / self.average_frames
                 # image_data += ((gauss2d_multiple(500, 200, 900, 800, 300, 400, 100, 50, 150, 400, 200, 50, 1, 0.7, 0.4, 0, 0, 0, x=xx, y=yy) + 1 + np.random.rand(*(xx.shape)) * 0.5) * 50) / self.average_frames
                 # image_data += (gauss2d_multiple([[500, 800, 100, 400, 1, 0], [200, 300, 50, 200, 0.7, 0], [900, 400, 150, 50, 0.4, 0]], xx, yy) + 1 + np.random.rand(*(xx.shape)) * 0.5) * 50 / self.average_frames
-                image_data += (gauss2d_multiple([[500, 800, 100, 400, 1, 0], [1600, 800, 50, 200, 0.7, 0], [1100, 1200, 150, 50, 0.9, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50 / self.average_frames
                 # image_data += (gauss2d_multiple([[500, 800, 100, 400, 1, 0], [1400, 800, 50, 200, 0.7, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50 / self.average_frames
+                # image_data += (gauss2d_multiple([[500, 800, 100, 400, 1, 0], [1600, 800, 50, 200, 0.7, 0], [1100, 1200, 150, 50, 0.9, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50 / self.average_frames
+                # image_data += (gauss2d_multiple([[1050, 1080, 10, 40, 1, 0], [1160, 1080, 5, 20, 0.7, 0], [1110, 1120, 15, 5, 0.9, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50 / self.average_frames
+                # image_data += (gauss2d_multiple([[960, 780, 10, 15, 1, 0], [1040, 720, 5, 10, 0.7, 0], [960, 720, 15, 5, 0.9, 0], [1040, 780, 10, 10, 0.8, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50 / self.average_frames
+                image_data += (gauss2d_multiple([[960, 780, 10, 15, 1, 0], [1040, 720, 5, 10, 0.7, 0], [960, 720, 15, 5, 0.9, 0], [1040, 780, 10, 10, 0.8, 0], [1080, 720, 12, 8, 0.9, 0]], xx, yy) + 0.01 + np.random.rand(*(xx.shape)) * 0.05) * 50 / self.average_frames
 
         image_data = image_data.astype(np.uint8)
         self.frame = image_data
