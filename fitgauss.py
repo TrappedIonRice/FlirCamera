@@ -675,6 +675,7 @@ def fitgauss2d_section(xx, yy, zz):
     # fit_x = fitgauss1d(xx, zz[np.min(np.abs(yy - fit_int_y[0][0])) == np.abs(yy - fit_int_y[0][0]), ::].flatten())
     # fit_y = fitgauss1d(yy, zz[::, np.min(np.abs(xx - fit_int_x[0][0])) == np.abs(xx - fit_int_x[0][0])].flatten())
     #print('\n',fit_int_y[0][0]) #debugging
+
     fit_x = fitgauss1d(xx, zz[round(fit_int_y[0][0]), ::])
     fit_y = fitgauss1d(yy, zz[::, round(fit_int_x[0][0])])
 
@@ -727,7 +728,7 @@ if __name__ == '__main__':
     yy = np.arange(ly)
     xx, yy = np.meshgrid(np.arange(ly), np.arange(lx))
     zz = data[::, :: ,2]
-    #print(xx.shape,yy.shape, zz.shape)
+    # print(xx.shape,yy.shape, zz.shape)
 
     start_time = time.time()
     #for i in range(1):

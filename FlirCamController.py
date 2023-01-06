@@ -50,6 +50,7 @@ class FlirCamController:
 
             # Choose cameras via serial number in a FlirCamSelector pop-up dialog box
             tk = tkinter.Tk()
+            tk.iconbitmap(default="logo.ico")
             tk.withdraw()
             # List of all available working Flir Cameras at the lab
             serial_list = ['19284652', '22129613']
