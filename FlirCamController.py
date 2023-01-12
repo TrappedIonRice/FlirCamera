@@ -53,7 +53,7 @@ class FlirCamController:
             tk.iconbitmap(default="logo.ico")
             tk.withdraw()
             # List of all available working Flir Cameras at the lab
-            serial_list = ['19284652', '22129613']
+            serial_list = ['19284652', '22129613','22532068']
             dialog = ChoiceDialog(tk, 'Flir Camera Selector',
                                   text='Choose the desired camera via its serial number: \n (ignore the ones that are not on)',
                                   items=serial_list)
