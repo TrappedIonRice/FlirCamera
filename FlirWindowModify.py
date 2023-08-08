@@ -22,6 +22,9 @@ import matplotlib.pyplot as plt
 class Ui_CustomWindow(Ui_MainWindow):
     def custom_init(self,mainwindow):
         self.mainwindow = mainwindow
+        self.stime = time.time()
+        self.nframe = 0
+        self.lasttime = time.time()
         self.section_xctr = 0
         self.section_yctr = 0
         self.section_xctr0 = 0
@@ -180,9 +183,11 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.pushButtonContinue.clicked.disconnect()
         self.pushButtonContinue.clicked.connect(self.stop_continue)
         # self.t0 = time.time()
-        self.update_timer.start(500)
+        self.update_timer.start(10) # It delays the next update of the window by 10ms.
+        # Originally 500ms, that's the main reason why it has low frame rate.
         # print('click')
         self.iter = 0
+        self.stime = time.time()
 
     def stop_continue(self):
         self.update_timer.stop()
@@ -194,13 +199,19 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.pushButtonContinue.clicked.connect(self.start_continue)
 
     def update_movie(self):
+        # stime=time.time() # debugging
+
         self.cam_controller.acquire_continue()
+        # print('1:' + str((time.time() - stime) * 1000))
         if self.checkBoxFit.isChecked():
             self.line_edit_multi_fits()
             # self.line_edit_slices()
+            # print('2:' + str((time.time() - stime) * 1000))
             if self.num_fits <= 1 or self.iter <= 0:
+                print
                 self.p, self.ier = fitgauss2d_section(np.arange(0, self.cam_controller.frame.shape[1]),
                                             np.arange(0, self.cam_controller.frame.shape[0]), self.cam_controller.frame)
+                # print('3:' + str((time.time() - stime) * 1000))
                 if self.num_fits <= 1:
                     self.update_plot()
                     # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
@@ -212,7 +223,7 @@ class Ui_CustomWindow(Ui_MainWindow):
                         self.lineEditHeight.setText('%.1f' % (self.p[4]))
                     else:
                         self.update_param_displays()
-
+                # print('4:' + str((time.time() - stime) * 1000))
                 if self.iter <= 0:
                     if self.p[2] < self.cam_controller.framewidth / self.slices and \
                             self.p[3] < self.cam_controller.frameheight / self.slices:
@@ -287,6 +298,11 @@ class Ui_CustomWindow(Ui_MainWindow):
 
         if self.checkBoxAutoExposure.isChecked():
             self.lineEditExposureTime.setText(str(self.cam_controller.get_exposure()))
+        # self.nframe += 1
+        # print('5:' + str((time.time() - stime) * 1000))
+        # print(time.time()-self.lasttime)
+        # self.lasttime=time.time()
+        # print((time.time() - self.stime) * 1000 / self.nframe)
 
     def update_param_displays(self, update_vals=True):
         while self.num_fits > len(self.param_displays[0]):
@@ -376,6 +392,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.ploty.setYRange(self.rect.top(), self.rect.bottom())
 
     def update_plot_withoutfit(self):
+        stime=time.time()
         self.section_xcoord = np.arange(0, self.cam_controller.frame.shape[1])
         self.section_xdata = self.cam_controller.frame[self.section_yctr,::]
         self.sectionx_line.setData(self.section_xcoord, self.section_xdata)
@@ -393,11 +410,12 @@ class Ui_CustomWindow(Ui_MainWindow):
         self.section_ydata_fit_mult = [[] for _ in range(self.num_fits)]
         for i in range(len(self.sectiony_fit_mult)):
             self.sectiony_fit_mult[i].setData(self.section_ydata_fit_mult[i], self.section_ycoord)
+        print('6:' + str((time.time() - stime) * 1000))
 
     def update_plot(self):
         # self.line_edit_multi_fits()
         # self.line_edit_slices()
-
+        # stime=time.time()
         self.section_xcoord = np.arange(0, self.cam_controller.frame.shape[1])
         self.section_xdata = self.cam_controller.frame[self.section_yctr,::]
         self.sectionx_line.setData(self.section_xcoord, self.section_xdata)
@@ -473,6 +491,7 @@ class Ui_CustomWindow(Ui_MainWindow):
                 for fit in self.p:
                     f.write(', ' + str(fit[0]) + ', ' + str(fit[1]))
                 f.write('\n')
+        # print('7:' + str((time.time() - stime) * 1000))
 
     # Gaussian function
     def gauss(self, t, A, mu, sigma, offset):

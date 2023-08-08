@@ -676,9 +676,18 @@ def fitgauss2d_section(xx, yy, zz):
     # fit_y = fitgauss1d(yy, zz[::, np.min(np.abs(xx - fit_int_x[0][0])) == np.abs(xx - fit_int_x[0][0])].flatten())
     #print('\n',fit_int_y[0][0]) #debugging
 
-    fit_x = fitgauss1d(xx, zz[round(fit_int_y[0][0]), ::])
-    fit_y = fitgauss1d(yy, zz[::, round(fit_int_x[0][0])])
+    # fit_x = fitgauss1d(xx, zz[round(fit_int_y[0][0]), ::])
+    # fit_y = fitgauss1d(yy, zz[::, round(fit_int_x[0][0])])
 
+    # The estimate may be out of range.
+    if 1 <= fit_int_y[0][0] <= zz.shape[0]:
+        fit_x = fitgauss1d(xx, zz[round(fit_int_y[0][0]), ::])
+    else:
+        fit_x = [[0, float('inf'), 0, 0], 1]
+    if 1 <= fit_int_x[0][0] <= zz.shape[1]:
+        fit_y = fitgauss1d(yy, zz[::, round(fit_int_x[0][0])])
+    else:
+        fit_y = [[0, float('inf'), 0, 0], 1]
     p = (fit_x[0][0], fit_y[0][0], fit_x[0][1], fit_y[0][1], (fit_x[0][2] + fit_y[0][2]) / 2, (fit_x[0][3] + fit_y[0][3]) / 2, )
 
     if all([fit_int_x[1] == 1, fit_int_y[1] == 1, fit_x[1] == 1, fit_y[1] == 1]):
