@@ -228,12 +228,8 @@ class FlirCamController:
     def acquire_continue(self):
         frames_succ = self.average_frames
         image_data = self.floatzeroframe.copy()
-
-
         for i in range(self.average_frames):
-
             image_result = self.cam.GetNextImage(self.exposuretimeupperlimit)  # GetNextImage( grabTimeout )
-
             if image_result.IsIncomplete():
                 self.update_log('Image incomplete with image status %d ...' % image_result.GetImageStatus())
                 image_result.Release()
@@ -244,35 +240,7 @@ class FlirCamController:
 
         if frames_succ == 0:
             return
-        image_data = image_data / frames_succ - self.background
-        image_data[image_data < 0] = 0
         self.frame = image_data.astype(uint8)
-
-        #  Ensure image completion
-        # if image_result.IsIncomplete():
-        #     self.update_log('Image incomplete with image status %d ...' % image_result.GetImageStatus())
-        #     image_result.Release()
-        #
-        # else:
-        #     # Getting the image data as a numpy array
-        #     image_data = image_result.GetNDArray()
-        #     if self.average_frames > 1:
-        #         image_data = image_data.astype(float) / self.average_frames
-        #         for i in range(self.average_frames - 1):
-        #             image_data += image_result.GetNDArray().astype(float) / self.average_frames
-        #         image_data = image_data.astype(uint8)
-        #
-        #     temp_background = self.background
-        #     badpoints = temp_background > image_data
-        #     temp_background[badpoints] = image_data[badpoints]
-        #     self.frame = image_data - temp_background
-
-        #  Release image
-        #
-        #  *** NOTES ***
-        #  Images retrieved directly from the camera (i.e. non-converted
-        #  images) need to be released in order to keep from filling the
-        #  buffer.
 
         return
 
@@ -420,7 +388,7 @@ class FlirCamController:
         self.count=self.count+1
         name=f"image_{self.count}.png"
         print(frametosave.max())
-        directory=r'C:\Python Programs\FlirCamera\picture'
+        directory=r'C:\Users\TrappedIonRice1\Documents\FlirCamera\FlirCamera-master\image'
         self.file_path=os.path.join(directory,name)
         cv2.imwrite(self.file_path, frametosave)
 

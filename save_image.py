@@ -38,6 +38,9 @@ def save_image():
                 if 'auto_expo' in data:
                     flir.reset_exposure()
                     print(flir.get_exposure())
+                    message = str(flir.get_exposure())#.encode('utf-8')
+                    message=message.encode('utf-8')
+                    client_socket.sendto(message, ('localhost', 49957))
                 if 'expo_time' in data:
                     expotime=float(data[10:])
                     expotime=expotime*1000
@@ -45,10 +48,10 @@ def save_image():
 
                     flir.configure_exposure(expotime)
 
-            time.sleep(0.1)
+            time.sleep(0.01)
         except Exception as e :
             print('error:',e)
-            time.sleep(0.1)
+            time.sleep(0.01)
 
     flir.stop_continue()
     flir.close()
