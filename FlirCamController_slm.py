@@ -382,13 +382,20 @@ class FlirCamController:
 
         return True
 
-    def file_save(self):
+    def file_save(self,item):
         frametosave = self.frame
 
-        self.count=self.count+1
-        name=f"image_{self.count}.png"
-        print(frametosave.max())
-        directory=r'C:\Users\TrappedIonRice1\Documents\FlirCamera\FlirCamera-master\image'
+
+        if item==0:
+            directory=r'C:\Users\RiceT\Documents\FlirCamera\pictures'
+        if item==1:
+            directory=r'C:\Users\RiceT\Documents\FlirCamera\pictures\image1'
+        if item==2:
+            directory=r'C:\Users\RiceT\Documents\FlirCamera\pictures\image2'
+        if item==3:
+            directory=r'C:\Users\RiceT\Documents\FlirCamera\pictures\image3'
+        self.count = str(time.time())
+        name = f"image_{self.count}.png"
         self.file_path=os.path.join(directory,name)
         cv2.imwrite(self.file_path, frametosave)
 

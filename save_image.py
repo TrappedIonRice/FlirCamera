@@ -23,18 +23,26 @@ def save_image():
     inputs=[client_socket]
     timeout = 0.01
     while True:
-        flir.acquire_continue()
+
         try:
             readable,writable,exceptional = select.select(inputs,[],[],timeout)
             if readable:
                 data = client_socket.recv(1024)
                 data=data.decode('utf-8')
-                print('receive',data)
-                print(type(data))
+
                 if 'run' in data:
-                    flir.file_save()
+                    flir.acquire_continue()
+                    flir.file_save(0)
                     message= flir.file_path.encode('utf-8')
                     client_socket.sendto(message,('localhost', 49957))
+                if 'take' in data:
+                    flir.acquire_continue()
+                    data_=int(data[4:])
+                    message = b'acquire finish'
+                    client_socket.sendto(message, ('localhost', 49957))
+                    flir.file_save(data_)
+                    message = b'save finish'
+                    client_socket.sendto(message, ('localhost', 49957))
                 if 'auto_expo' in data:
                     flir.reset_exposure()
                     print(flir.get_exposure())
@@ -50,7 +58,7 @@ def save_image():
 
             time.sleep(0.01)
         except Exception as e :
-            print('error:',e)
+            print('error_image_save:',e)
             time.sleep(0.01)
 
     flir.stop_continue()
