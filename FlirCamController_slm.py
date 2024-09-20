@@ -80,8 +80,8 @@ class FlirCamController:
         self.update_log('%s is set to %f' % (node_binningvertical.GetDisplayName(), node_binningvertical.GetValue()))
 
         # set frame size after binning
-        self.framewidth = 4000
-        self.frameheight = 3000
+        self.framewidth = self.cam.Width.GetValue()
+        self.frameheight = self.cam.Height.GetValue()
         self.pixel_size *= 1
         self.frame = zeros((self.frameheight, self.framewidth), dtype=uint8)
         self.background = zeros((self.frameheight, self.framewidth), dtype=uint8)
@@ -398,6 +398,86 @@ class FlirCamController:
         name = f"image_{self.count}.png"
         self.file_path=os.path.join(directory,name)
         cv2.imwrite(self.file_path, frametosave)
+
+    def setSize(self, xoffset, yoffset, width, height):
+        try:
+            result = True
+
+            # Apply mono 8 pixel format
+            #
+            # *** NOTES ***
+            # In QuickSpin, enumeration nodes are as easy to set as other node
+            # types. This is because enum values representing each entry node
+            # are added to the API.
+            if self.cam.PixelFormat.GetAccessMode() == PySpin.RW:
+                self.cam.PixelFormat.SetValue(PySpin.PixelFormat_Mono8)
+                print("Pixel format set to %s..." % self.cam.PixelFormat.GetCurrentEntry().GetSymbolic())
+            else:
+                print("Pixel format not available...")
+                result = False
+
+            # Apply minimum to offset X
+            #
+            # *** NOTES ***
+            # Numeric nodes have both a minimum and maximum. A minimum is retrieved
+            # with the method GetMin(). Sometimes it can be important to check
+            # minimums to ensure that your desired value is within range.
+            if self.cam.OffsetX.GetAccessMode() == PySpin.RW:
+                self.cam.OffsetX.SetValue(xoffset)
+                print("Offset X set to %d..." % self.cam.OffsetX.GetValue())
+
+            else:
+                print("Offset X not available...")
+                result = False
+
+            # Apply minimum to offset Y
+            #
+            # *** NOTES ***
+            # It is often desirable to check the increment as well. The increment
+            # is a number of which a desired value must be a multiple. Certain
+            # nodes, such as those corresponding to offsets X and Y, have an
+            # increment of 1, which basically means that any value within range
+            # is appropriate. The increment is retrieved with the method GetInc().
+            if self.cam.OffsetY.GetAccessMode() == PySpin.RW:
+                self.cam.OffsetY.SetValue(yoffset)
+                print("Offset Y set to %d..." % self.cam.OffsetY.GetValue())
+            else:
+                print("Offset Y not available...")
+                result = False
+
+            # Set maximum width
+            #
+            # *** NOTES ***
+            # Other nodes, such as those corresponding to image width and height,
+            # might have an increment other than 1. In these cases, it can be
+            # important to check that the desired value is a multiple of the
+            # increment.
+            #
+            # This is often the case for width and height nodes. However, because
+            # these nodes are being set to their maximums, there is no real reason
+            # to check against the increment.
+            if self.cam.Width.GetAccessMode() == PySpin.RO:
+                print('Read only mode')
+            if self.cam.Width.GetAccessMode() == PySpin.RW and self.cam.Width.GetInc() != 0 and self.cam.Width.GetMax != 0:
+                self.cam.Width.SetValue(width)
+                print("Width set to %i..." % self.cam.Width.GetValue())
+            else:
+                print("Width not available...")
+                result = False
+            # Set maximum height
+            #
+            # *** NOTES ***
+            # A maximum is retrieved with the method GetMax(). A node's minimum and
+            # maximum should always be a multiple of its increment.
+            if self.cam.Height.GetAccessMode() == PySpin.RW and self.cam.Height.GetInc() != 0 and self.cam.Height.GetMax != 0:
+                self.cam.Height.SetValue(height)
+                print("Height set to %i..." % self.cam.Height.GetValue())
+            else:
+                print("Height not available...")
+                result = False
+        except PySpin.SpinnakerException as ex:
+            print("Error: %s" % ex)
+            return False
 
 
 if __name__ == '__main__':
