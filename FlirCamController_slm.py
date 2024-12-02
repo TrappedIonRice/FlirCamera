@@ -7,6 +7,7 @@ from numpy import zeros, uint8
 import time
 import cv2
 import os
+import datetime
 class FlirCamController:
     def initialize(self):
         self.count=1
@@ -382,22 +383,15 @@ class FlirCamController:
 
         return True
 
-    def file_save(self,item):
+    def file_save(self,path):
         frametosave = self.frame
 
 
-        if item==0:
-            directory=r'C:\Users\RiceT\Documents\FlirCamera\pictures'
-        if item==1:
-            directory=r'C:\Users\RiceT\Documents\FlirCamera\pictures\image1'
-        if item==2:
-            directory=r'C:\Users\RiceT\Documents\FlirCamera\pictures\image2'
-        if item==3:
-            directory=r'C:\Users\RiceT\Documents\FlirCamera\pictures\image3'
-        self.count = str(time.time())
-        name = f"image_{self.count}.png"
-        self.file_path=os.path.join(directory,name)
-        cv2.imwrite(self.file_path, frametosave)
+        try:
+            cv2.imwrite(path, frametosave)
+        except Exception as e:
+            print('save error:',e)
+
 
     def setSize(self, xoffset, yoffset, width, height):
         try:
@@ -475,6 +469,13 @@ class FlirCamController:
             else:
                 print("Height not available...")
                 result = False
+            self.framewidth = self.cam.Width.GetValue()
+            self.frameheight = self.cam.Height.GetValue()
+            self.pixel_size *= 1
+            self.frame = zeros((self.frameheight, self.framewidth), dtype=uint8)
+            self.background = zeros((self.frameheight, self.framewidth), dtype=uint8)
+            self.nobackground = zeros((self.frameheight, self.framewidth), dtype=uint8)
+            self.floatzeroframe = zeros((self.frameheight, self.framewidth))
         except PySpin.SpinnakerException as ex:
             print("Error: %s" % ex)
             return False
