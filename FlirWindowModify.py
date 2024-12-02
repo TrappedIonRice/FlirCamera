@@ -13,6 +13,7 @@ import numpy as np
 import os
 import cv2
 import math
+import statistics
 
 import matplotlib.pyplot as plt
 
@@ -177,6 +178,14 @@ class Ui_CustomWindow(Ui_MainWindow):
         with open('center_log/' + self.start_date + '.txt', 'w') as f:
             f.write('time, x0, y0, x1, y1...\n')
 
+        # files containing only the x and y positions in the format:
+        if not os.path.exists('centers_x_log'):
+            os.makedirs('centers_x_log')
+        if not os.path.exists('centers_y_log'):
+            os.makedirs('centers_y_log')
+
+        self.avg_win_width = 50
+
     def start_continue(self):
         self.cam_controller.start_continue()
         self.pushButtonContinue.setText("Stop Continue")
@@ -214,10 +223,44 @@ class Ui_CustomWindow(Ui_MainWindow):
                 # print('3:' + str((time.time() - stime) * 1000))
                 if self.num_fits <= 1:
                     self.update_plot()
+
+                    # add x and y centers to corresponding files in their own directories
+                    with open('centers_x_log/' + self.start_date + '.txt', 'a') as f:
+                        f.write(str(time.time() - self.start_time) + " " + str(self.p[0]) + "\n")
+                        f.flush() # save data immediately
+                    with open('centers_y_log/' + self.start_date + '.txt', 'a') as f:
+                        f.write(str(time.time() - self.start_time) + " " + str(self.p[1]) + "\n")
+                        f.flush()
+
+                    # extract at most the last self.avg_win_width elements from the data files
+                    with open('centers_x_log/' + self.start_date + '.txt', 'r') as fx, open('centers_y_log/' + self.start_date + '.txt', 'r') as fy:
+                        i = 0
+                        line_x = []
+                        line_y = []
+
+                        for _ in fx: # only keep the last self.avg_win_width entries
+                            line_x = fx.readlines()
+                            line_y = fy.readlines()
+                            if len(line_x) > self.avg_win_width and len(line_y) > self.avg_win_width:
+                                line_x = line_x[-self.avg_win_width:]
+                                line_y = line_y[-self.avg_win_width:]
+
+                    # calculate the avg and stdev
+                    floats_x = [float(line.strip().split()[-1]) for line in line_x] # obtain only the values (last element in each row); convert strings to floats
+                    floats_y = [float(line.strip().split()[-1]) for line in line_y]
+                    self.x_cent_avg = np.mean(floats_x)
+                    self.y_cent_avg = np.mean(floats_y)
+                    self.x_cent_stdv = np.std(floats_x) if len(floats_x) > 1 else float("nan")
+                    self.y_cent_stdv = np.std(floats_y) if len(floats_y) > 1 else float("nan")
+
                     # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
                     if self.lineEditxCenter.parent() is not None:
                         self.lineEditxCenter.setText('%.1f' % (self.p[0]))
+                        self.lineEditAVGxCenter.setText('%.1f' % (self.x_cent_avg))
+                        self.lineEditDxCenter.setText('%.1f' % (self.x_cent_stdv))
                         self.lineEdityCenter.setText('%.1f' % (self.p[1]))
+                        self.lineEditAVGyCenter.setText('%.1f' % (self.y_cent_avg))
+                        self.lineEditDyCenter.setText('%.1f' % (self.y_cent_stdv))
                         self.lineEditxWaist.setText('%.1f' % (self.p[2] * 2*self.unit))
                         self.lineEdityWaist.setText('%.1f' % (self.p[3] * 2*self.unit))
                         self.lineEditHeight.setText('%.1f' % (self.p[4]))
@@ -252,26 +295,38 @@ class Ui_CustomWindow(Ui_MainWindow):
                     self.gridLayoutFitResult.addLayout(self.param_label_layout, 0, 0, 1, 1)
                     self.gridLayoutFitResult.addLayout(self.param_layout, 0, 1, 1, 1)
                     self.lineEditxCenter.setParent(None)
+                    self.lineEditAVGxCenter.setParent(None)
+                    self.lineEditDxCenter.setParent(None)
                     self.lineEdityCenter.setParent(None)
+                    self.lineEditAVGyCenter.setParent(None)
+                    self.lineEditDyCenter.setParent(None)
                     self.lineEditxWaist.setParent(None)
                     self.lineEdityWaist.setParent(None)
                     self.lineEditHeight.setParent(None)
 
+                    self.labelAVG.setParent(None)
+                    self.param_label_layout.addWidget(self.labelAVG, 0, 2, 1, 1)
+                    self.labelD.setParent(None)
+                    self.param_label_layout.addWidget(self.labelD, 0, 3, 1, 1)
                     self.labelxCenter.setParent(None)
-                    self.param_label_layout.addWidget(self.labelxCenter, 0, 0, 1, 1)
+                    self.param_label_layout.addWidget(self.labelxCenter, 1, 0, 1, 1)
                     self.labelyCenter.setParent(None)
-                    self.param_label_layout.addWidget(self.labelyCenter, 1, 0, 1, 1)
+                    self.param_label_layout.addWidget(self.labelyCenter, 2, 0, 1, 1)
                     self.labelxWaist.setParent(None)
-                    self.param_label_layout.addWidget(self.labelxWaist, 2, 0, 1, 1)
+                    self.param_label_layout.addWidget(self.labelxWaist, 3, 0, 1, 1)
                     self.labelyWaist.setParent(None)
-                    self.param_label_layout.addWidget(self.labelyWaist, 3, 0, 1, 1)
+                    self.param_label_layout.addWidget(self.labelyWaist, 4, 0, 1, 1)
                     self.labelHeight.setParent(None)
-                    self.param_label_layout.addWidget(self.labelHeight, 4, 0, 1, 1)
+                    self.param_label_layout.addWidget(self.labelHeight, 5, 0, 1, 1)
 
                 self.update_param_displays()
 
         else:
             self.update_plot_withoutfit()
+            self.lineEditAVGxCenter.setText('N/A')
+            self.lineEditAVGyCenter.setText('N/A')
+            self.lineEditDxCenter.setText('N/A')
+            self.lineEditDyCenter.setText('N/A')
             self.lineEditxCenter.setText('N/A')
             self.lineEdityCenter.setText('N/A')
             self.lineEditxWaist.setText('N/A')
