@@ -184,6 +184,10 @@ class Ui_CustomWindow(Ui_MainWindow):
         if not os.path.exists('centers_y_log'):
             os.makedirs('centers_y_log')
 
+        # logging x_0 y_0 w_x w_y h
+        if not os.path.exists('log_x_y_wx_wy_h'):
+            os.makedirs('log_x_y_wx_wy_h')
+
         self.avg_win_width = 50
 
     def start_continue(self):
@@ -232,6 +236,10 @@ class Ui_CustomWindow(Ui_MainWindow):
                         f.write(str(time.time() - self.start_time) + " " + str(self.p[1]) + "\n")
                         f.flush()
 
+                    with open('log_x_y_wx_wy_h/' + self.start_date + '.txt', 'a') as f:
+                        f.write(str(time.time() - self.start_time) + " " + str(self.p[0]) + " " + str(self.p[1]) + " " + str(self.p[2]) + " " + str(self.p[3]) + " " + str(self.p[4]) + "\n")
+                        f.flush()
+
                     # extract at most the last self.avg_win_width elements from the data files
                     with open('centers_x_log/' + self.start_date + '.txt', 'r') as fx, open('centers_y_log/' + self.start_date + '.txt', 'r') as fy:
                         i = 0
@@ -255,12 +263,12 @@ class Ui_CustomWindow(Ui_MainWindow):
 
                     # Display measurements in pixels instead of microns (if we want to convert back to microns, multiply by self.unit)
                     if self.lineEditxCenter.parent() is not None:
-                        self.lineEditxCenter.setText('%.1f' % (self.p[0]))
-                        self.lineEditAVGxCenter.setText('%.1f' % (self.x_cent_avg))
-                        self.lineEditDxCenter.setText('%.1f' % (self.x_cent_stdv))
-                        self.lineEdityCenter.setText('%.1f' % (self.p[1]))
-                        self.lineEditAVGyCenter.setText('%.1f' % (self.y_cent_avg))
-                        self.lineEditDyCenter.setText('%.1f' % (self.y_cent_stdv))
+                        self.lineEditxCenter.setText('%.2f' % (self.p[0]))
+                        self.lineEditAVGxCenter.setText('%.2f' % (self.x_cent_avg))
+                        self.lineEditDxCenter.setText('%.2f' % (self.x_cent_stdv))
+                        self.lineEdityCenter.setText('%.2f' % (self.p[1]))
+                        self.lineEditAVGyCenter.setText('%.2f' % (self.y_cent_avg))
+                        self.lineEditDyCenter.setText('%.2f' % (self.y_cent_stdv))
                         self.lineEditxWaist.setText('%.1f' % (self.p[2] * 2*self.unit))
                         self.lineEdityWaist.setText('%.1f' % (self.p[3] * 2*self.unit))
                         self.lineEditHeight.setText('%.1f' % (self.p[4]))
@@ -580,7 +588,7 @@ class Ui_CustomWindow(Ui_MainWindow):
         label_height = self.labelImage.size().height()
         painter = QtGui.QPainter(self.pixmap)
         pen = QtGui.QPen()
-        pen.setWidth(5) #reduced width of crosshair from 20 to 5
+        pen.setWidth(1) #reduced width of crosshair from 20 to 5
         pen.setColor(QtGui.QColor('green'))
         painter.setPen(pen)
         painter.setOpacity(0.4)
