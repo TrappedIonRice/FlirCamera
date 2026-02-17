@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'FlirCamWindow.ui'
 #
@@ -12,21 +13,25 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
-FONT='Arial'
-FONTDIM=16
-CLMNDIM=5
+FONT = 'Arial'
+FONTDIM = 16
+CLMNDIM = 5
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1090, 757)
+        MainWindow.resize(1250, 757)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+
+        # Main Sizing Policy
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName("centralwidget")
+
         self.gridLayoutCenter = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayoutCenter.setObjectName("gridLayoutCenter")
         self.horizontalLayoutWhole = QtWidgets.QHBoxLayout()
@@ -38,20 +43,24 @@ class Ui_MainWindow(object):
         self.centralwidget.resize(100, 200)
 
         self.param_font = QFont(FONT, FONTDIM)
-        self.param_font.setPointSize(20) # was 10; George Tomaras changed it on 2024/10/08
+        self.param_font.setPointSize(20)
 
-        ###### Labels for the quantities displayed ######
-        # format: layout.addWidget(widget, row, column, rowSpan, columnSpan, alignment=Qt.Alignment())
-        self.labelAVG = QtWidgets.QLabel(self.centralwidget) # Average
+        # ==========================================================
+        # LEFT PANEL: DATA DISPLAY
+        # ==========================================================
+
+        ###### HEADERS ######
+        self.labelAVG = QtWidgets.QLabel(self.centralwidget)
         self.labelAVG.setFont(QFont(FONT, FONTDIM))
         self.labelAVG.setObjectName("labelAVG")
         self.gridLayoutFitResult.addWidget(self.labelAVG, 0, 2, 1, 1)
 
-        self.labelD = QtWidgets.QLabel(self.centralwidget) # STDV
+        self.labelD = QtWidgets.QLabel(self.centralwidget)
         self.labelD.setFont(QFont(FONT, FONTDIM))
         self.labelD.setObjectName("labelD")
         self.gridLayoutFitResult.addWidget(self.labelD, 0, 3, 1, 1)
 
+        ###### LABELS (Col 0) ######
         self.labelxCenter = QtWidgets.QLabel(self.centralwidget)
         self.labelxCenter.setFont(QFont(FONT, FONTDIM))
         self.labelxCenter.setObjectName("labelxCenter")
@@ -77,94 +86,215 @@ class Ui_MainWindow(object):
         self.labelHeight.setFont(QFont(FONT, FONTDIM))
         self.gridLayoutFitResult.addWidget(self.labelHeight, 5, 0, 1, 1)
 
-        self.labelUnit = QtWidgets.QLabel(self.centralwidget)
-        self.labelUnit.setObjectName("labelUnit")
-        self.gridLayoutFitResult.addWidget(self.labelUnit, 6, 0, 1, 1)
-
-        self.labelToggle = QtWidgets.QLabel(self.centralwidget)
-        self.labelToggle.setObjectName("labelToggle")
-        self.gridLayoutFitResult.addWidget(self.labelToggle, 7, 0, 1, 1)
-        #################################################
-
-        ###### Display data ######
+        # --- ROW 1: X CENTER ---
         self.lineEditxCenter = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditxCenter.setEnabled(True)
         self.lineEditxCenter.setFont(self.param_font)
-        self.lineEditxCenter.setFixedWidth(150) # to accomodate all fields in the row
-        self.lineEditxCenter.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.lineEditxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.lineEditxCenter.setFixedWidth(110)
+        self.lineEditxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEditxCenter.setObjectName("lineEditxCenter")
         self.gridLayoutFitResult.addWidget(self.lineEditxCenter, 1, 1, 1, 1)
 
         self.lineEditAVGxCenter = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditAVGxCenter.setEnabled(True)
         self.lineEditAVGxCenter.setFont(self.param_font)
-        self.lineEditAVGxCenter.setFixedWidth(150)
-        self.lineEditAVGxCenter.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.lineEditAVGxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.lineEditAVGxCenter.setFixedWidth(110)
+        self.lineEditAVGxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEditAVGxCenter.setObjectName("lineEditAVGxCenter")
         self.gridLayoutFitResult.addWidget(self.lineEditAVGxCenter, 1, 2, 1, 1)
 
         self.lineEditDxCenter = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditDxCenter.setEnabled(True)
         self.lineEditDxCenter.setFont(self.param_font)
-        self.lineEditDxCenter.setFixedWidth(150)
-        self.lineEditDxCenter.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.lineEditDxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.lineEditDxCenter.setFixedWidth(110)
+        self.lineEditDxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEditDxCenter.setObjectName("lineEditDxCenter")
-        self.gridLayoutFitResult.addWidget(self.lineEditDxCenter, 1, 3, 1, 3)
+        self.gridLayoutFitResult.addWidget(self.lineEditDxCenter, 1, 3, 1, 1)
 
+        # --- ROW 2: Y CENTER ---
         self.lineEdityCenter = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdityCenter.setEnabled(True)
         self.lineEdityCenter.setFont(self.param_font)
-        self.lineEdityCenter.setFixedWidth(150)
-        self.lineEdityCenter.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.lineEdityCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.lineEdityCenter.setFixedWidth(110)
+        self.lineEdityCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEdityCenter.setObjectName("lineEdityCenter")
         self.gridLayoutFitResult.addWidget(self.lineEdityCenter, 2, 1, 1, 1)
 
         self.lineEditAVGyCenter = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditAVGyCenter.setEnabled(True)
         self.lineEditAVGyCenter.setFont(self.param_font)
-        self.lineEditAVGyCenter.setFixedWidth(150)
-        self.lineEditAVGyCenter.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.lineEditAVGyCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.lineEditAVGyCenter.setFixedWidth(110)
+        self.lineEditAVGyCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEditAVGyCenter.setObjectName("lineEditAVGyCenter")
         self.gridLayoutFitResult.addWidget(self.lineEditAVGyCenter, 2, 2, 1, 1)
 
         self.lineEditDyCenter = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditDyCenter.setEnabled(True)
         self.lineEditDyCenter.setFont(self.param_font)
-        self.lineEditDyCenter.setFixedWidth(150)
-        self.lineEditDyCenter.setLayoutDirection(QtCore.Qt.RightToLeft)
-        self.lineEditDyCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.lineEditDyCenter.setFixedWidth(110)
+        self.lineEditDyCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEditDyCenter.setObjectName("lineEditDyCenter")
-        self.gridLayoutFitResult.addWidget(self.lineEditDyCenter, 2, 3, 1, 3)
+        self.gridLayoutFitResult.addWidget(self.lineEditDyCenter, 2, 3, 1, 1)
 
+        # --- ROWS 3, 4, 5: WIDE BOXES ---
+        TOTAL_WIDTH = 340
+
+        # X WAIST
         self.lineEditxWaist = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditxWaist.setEnabled(True)
         self.lineEditxWaist.setFont(self.param_font)
-        # self.lineEditxWaist.setFixedWidth(400)
-        self.lineEditxWaist.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEditxWaist.setFixedWidth(TOTAL_WIDTH)
+        self.lineEditxWaist.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEditxWaist.setObjectName("lineEditxWaist")
-        self.gridLayoutFitResult.addWidget(self.lineEditxWaist, 3, 1, 1, CLMNDIM)
+        self.gridLayoutFitResult.addWidget(self.lineEditxWaist, 3, 1, 1, 3)
 
+        # Y WAIST
         self.lineEdityWaist = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdityWaist.setEnabled(True)
         self.lineEdityWaist.setFont(self.param_font)
-        # self.lineEdityWaist.setFixedWidth(450)
-        self.lineEdityWaist.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEdityWaist.setFixedWidth(TOTAL_WIDTH)
+        self.lineEdityWaist.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEdityWaist.setObjectName("lineEdityWaist")
-        self.gridLayoutFitResult.addWidget(self.lineEdityWaist, 4, 1, 1, CLMNDIM)
+        self.gridLayoutFitResult.addWidget(self.lineEdityWaist, 4, 1, 1, 3)
 
+        # HEIGHT
         self.lineEditHeight = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEditHeight.setEnabled(True)
         self.lineEditHeight.setFont(self.param_font)
-        # self.lineEditHeight.setFixedWidth(450)
-        self.lineEditHeight.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lineEditHeight.setFixedWidth(TOTAL_WIDTH)
+        self.lineEditHeight.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.lineEditHeight.setObjectName("lineEditHeight")
-        self.gridLayoutFitResult.addWidget(self.lineEditHeight, 5, 1, 1, CLMNDIM)
-        ##################################
+        self.gridLayoutFitResult.addWidget(self.lineEditHeight, 5, 1, 1, 3)
+
+        self.gridLayoutImage.addLayout(self.gridLayoutFitResult, 1, 1, 1, 1)
+
+        self.labelImage = QtWidgets.QLabel(self.centralwidget)
+        self.labelImage.setText("")
+        self.labelImage.setObjectName("labelImage")
+
+        self.gridLayoutImage.addWidget(self.labelImage, 0, 0, 1, 1)
+        self.gridLayoutImage.setColumnStretch(0, 3)
+        self.gridLayoutImage.setColumnStretch(1, 1)
+        self.gridLayoutImage.setRowStretch(0, 3)
+        self.gridLayoutImage.setRowStretch(1, 1)
+        self.horizontalLayoutWhole.addLayout(self.gridLayoutImage)
+
+        # ==========================================================
+        # RIGHT PANEL: BUTTONS & CONTROLS
+        # ==========================================================
+        self.verticalLayoutRight = QtWidgets.QVBoxLayout()
+        self.verticalLayoutRight.setSpacing(7)
+        self.verticalLayoutRight.setObjectName("verticalLayoutRight")
+        self.verticalLayoutControl = QtWidgets.QVBoxLayout()
+        self.verticalLayoutControl.setSpacing(10)
+        self.verticalLayoutControl.setObjectName("verticalLayoutControl")
+
+        self.pushButtonContinue = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButtonContinue.setObjectName("pushButtonContinue")
+        self.verticalLayoutControl.addWidget(self.pushButtonContinue)
+
+        self.pushButtonSetBg = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButtonSetBg.setObjectName("pushButtonSetBg")
+        self.verticalLayoutControl.addWidget(self.pushButtonSetBg)
+
+        self.pushButtonClearBg = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButtonClearBg.setObjectName("pushButtonClearBg")
+        self.verticalLayoutControl.addWidget(self.pushButtonClearBg)
+
+        self.pushButtonSectionCenter = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButtonSectionCenter.setObjectName("pushButtonSectionCenter")
+        self.verticalLayoutControl.addWidget(self.pushButtonSectionCenter)
+
+        # --- CONTROLS GRID ---
+        self.gridLayoutControlValues = QtWidgets.QGridLayout()
+        self.gridLayoutControlValues.setHorizontalSpacing(7)
+        self.gridLayoutControlValues.setVerticalSpacing(20)
+        self.gridLayoutControlValues.setObjectName("gridLayoutControlValues")
+
+        MIN_INPUT_WIDTH = 140
+
+        # Row 0
+        self.labelAutoExposure = QtWidgets.QLabel(self.centralwidget)
+        self.labelAutoExposure.setObjectName("labelAutoExposure")
+        self.gridLayoutControlValues.addWidget(self.labelAutoExposure, 0, 0, 1, 1)
+        self.checkBoxAutoExposure = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBoxAutoExposure.setChecked(False)
+        self.checkBoxAutoExposure.setObjectName("checkBoxAutoExposure")
+        self.gridLayoutControlValues.addWidget(self.checkBoxAutoExposure, 0, 1, 1, 1)
+
+        # Row 1
+        self.labelMultiFits = QtWidgets.QLabel(self.centralwidget)
+        self.labelMultiFits.setObjectName("labelExposure")
+        self.gridLayoutControlValues.addWidget(self.labelMultiFits, 1, 0, 1, 1)
+        self.lineEditMultiFits = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEditMultiFits.setMinimumWidth(MIN_INPUT_WIDTH)
+        self.lineEditMultiFits.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.lineEditMultiFits.setObjectName("lineEditMultiFits")
+        self.gridLayoutControlValues.addWidget(self.lineEditMultiFits, 1, 1, 1, 1)
+
+        # Row 2
+        self.labelExposure = QtWidgets.QLabel(self.centralwidget)
+        self.labelExposure.setObjectName("labelExposure")
+        self.gridLayoutControlValues.addWidget(self.labelExposure, 2, 0, 1, 1)
+        self.lineEditExposureTime = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEditExposureTime.setMinimumWidth(MIN_INPUT_WIDTH)
+        self.lineEditExposureTime.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.lineEditExposureTime.setObjectName("lineEditExposureTime")
+        self.gridLayoutControlValues.addWidget(self.lineEditExposureTime, 2, 1, 1, 1)
+
+        # Row 3
+        self.labelSectionX = QtWidgets.QLabel(self.centralwidget)
+        self.labelSectionX.setObjectName("labelSectionX")
+        self.gridLayoutControlValues.addWidget(self.labelSectionX, 3, 0, 1, 1)
+        self.lineEditSectionX = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEditSectionX.setMinimumWidth(MIN_INPUT_WIDTH)
+        self.lineEditSectionX.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.lineEditSectionX.setObjectName("lineEditSectionX")
+        self.gridLayoutControlValues.addWidget(self.lineEditSectionX, 3, 1, 1, 1)
+
+        # Row 4
+        self.labelSectionY = QtWidgets.QLabel(self.centralwidget)
+        self.labelSectionY.setObjectName("labelSectionY")
+        self.gridLayoutControlValues.addWidget(self.labelSectionY, 4, 0, 1, 1)
+        self.lineEditSectionY = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEditSectionY.setMinimumWidth(MIN_INPUT_WIDTH)
+        self.lineEditSectionY.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.lineEditSectionY.setObjectName("lineEditSectionY")
+        self.gridLayoutControlValues.addWidget(self.lineEditSectionY, 4, 1, 1, 1)
+
+        # Row 5
+        self.labelAverageFrames = QtWidgets.QLabel(self.centralwidget)
+        self.labelAverageFrames.setObjectName("labelAverageFrames")
+        self.gridLayoutControlValues.addWidget(self.labelAverageFrames, 5, 0, 1, 1)
+        self.lineEditAverageFrames = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEditAverageFrames.setMinimumWidth(MIN_INPUT_WIDTH)
+        self.lineEditAverageFrames.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.lineEditAverageFrames.setObjectName("lineEditAverageFrames")
+        self.gridLayoutControlValues.addWidget(self.lineEditAverageFrames, 5, 1, 1, 1)
+
+        # --- ROW 6: LOG WINDOW (NEW) ---
+        self.labelLogWindow = QtWidgets.QLabel(self.centralwidget)
+        self.labelLogWindow.setText("Stats Window Width :")
+        self.labelLogWindow.setObjectName("labelLogWindow")
+        self.gridLayoutControlValues.addWidget(self.labelLogWindow, 6, 0, 1, 1)
+
+        self.lineEditLogWindow = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEditLogWindow.setMinimumWidth(MIN_INPUT_WIDTH)
+        self.lineEditLogWindow.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        self.lineEditLogWindow.setText("50")
+        self.lineEditLogWindow.setObjectName("lineEditLogWindow")
+        self.gridLayoutControlValues.addWidget(self.lineEditLogWindow, 6, 1, 1, 1)
+
+        # --- ROW 7: LOG DATA CHECKBOX ---
+        self.checkBoxLogData = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBoxLogData.setText("Log Data (t x y wx wy h)")
+        self.checkBoxLogData.setObjectName("checkBoxLogData")
+        self.gridLayoutControlValues.addWidget(self.checkBoxLogData, 7, 0, 1, 2)
+
+        # --- ROW 8: UNIT ROW (Moved) ---
+        self.labelUnit = QtWidgets.QLabel(self.centralwidget)
+        self.labelUnit.setObjectName("labelUnit")
+        self.gridLayoutControlValues.addWidget(self.labelUnit, 8, 0, 1, 1)
 
         self.horizontalLayoutUnit = QtWidgets.QHBoxLayout()
         self.horizontalLayoutUnit.setObjectName("horizontalLayoutUnit")
@@ -176,7 +306,12 @@ class Ui_MainWindow(object):
         self.radioButtonUnitPixel.setChecked(False)
         self.radioButtonUnitPixel.setObjectName("radioButtonUnitPixel")
         self.horizontalLayoutUnit.addWidget(self.radioButtonUnitPixel)
-        self.gridLayoutFitResult.addLayout(self.horizontalLayoutUnit, 6, 1, 1, 1)
+        self.gridLayoutControlValues.addLayout(self.horizontalLayoutUnit, 8, 1, 1, 1)
+
+        # --- ROW 9: TOGGLE ROW (Moved) ---
+        self.labelToggle = QtWidgets.QLabel(self.centralwidget)
+        self.labelToggle.setObjectName("labelToggle")
+        self.gridLayoutControlValues.addWidget(self.labelToggle, 9, 0, 1, 1)
 
         self.horizontalLayoutToggle = QtWidgets.QHBoxLayout()
         self.checkBoxFit = QtWidgets.QCheckBox(self.centralwidget)
@@ -191,179 +326,12 @@ class Ui_MainWindow(object):
         self.checkBoxCrosshair.setChecked(True)
         self.checkBoxCrosshair.setObjectName("checkBoxCrosshair")
         self.horizontalLayoutToggle.addWidget(self.checkBoxCrosshair)
-        self.gridLayoutFitResult.addLayout(self.horizontalLayoutToggle, 7, 1, 1, 1)
+        self.gridLayoutControlValues.addLayout(self.horizontalLayoutToggle, 9, 1, 1, 1)
 
-        self.gridLayoutFitResult.setColumnStretch(0, 1)
-        self.gridLayoutFitResult.setColumnStretch(1, 1)
-        self.gridLayoutImage.addLayout(self.gridLayoutFitResult, 1, 1, 1, 1)
-        self.labelImage = QtWidgets.QLabel(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.labelImage.sizePolicy().hasHeightForWidth())
-        self.labelImage.setSizePolicy(sizePolicy)
-        self.labelImage.setMaximumSize(QtCore.QSize(4000, 3000))
-        self.labelImage.setText("")
-        self.labelImage.setScaledContents(True)
-        self.labelImage.setObjectName("labelImage")
-        self.gridLayoutImage.addWidget(self.labelImage, 0, 0, 1, 1)
-        self.gridLayoutImage.setColumnStretch(0, 3)
-        self.gridLayoutImage.setColumnStretch(1, 1)
-        self.gridLayoutImage.setRowStretch(0, 3)
-        self.gridLayoutImage.setRowStretch(1, 1)
-        self.horizontalLayoutWhole.addLayout(self.gridLayoutImage)
-        self.verticalLayoutRight = QtWidgets.QVBoxLayout()
-        self.verticalLayoutRight.setSpacing(7)
-        self.verticalLayoutRight.setObjectName("verticalLayoutRight")
-        self.verticalLayoutControl = QtWidgets.QVBoxLayout()
-        self.verticalLayoutControl.setSpacing(10)
-        self.verticalLayoutControl.setObjectName("verticalLayoutControl")
-        self.pushButtonContinue = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonContinue.sizePolicy().hasHeightForWidth())
-        self.pushButtonContinue.setSizePolicy(sizePolicy)
-        self.pushButtonContinue.setObjectName("pushButtonContinue")
-        self.verticalLayoutControl.addWidget(self.pushButtonContinue)
-        self.pushButtonSetBg = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonSetBg.sizePolicy().hasHeightForWidth())
-        self.pushButtonSetBg.setSizePolicy(sizePolicy)
-        self.pushButtonSetBg.setObjectName("pushButtonSetBg")
-        self.verticalLayoutControl.addWidget(self.pushButtonSetBg)
-        self.pushButtonClearBg = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonClearBg.sizePolicy().hasHeightForWidth())
-        self.pushButtonClearBg.setSizePolicy(sizePolicy)
-        self.pushButtonClearBg.setObjectName("pushButtonClearBg")
-        self.verticalLayoutControl.addWidget(self.pushButtonClearBg)
-        self.pushButtonSectionCenter = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButtonSectionCenter.setObjectName("pushButtonSectionCenter")
-        self.verticalLayoutControl.addWidget(self.pushButtonSectionCenter)
-        self.gridLayoutControlValues = QtWidgets.QGridLayout()
-        self.gridLayoutControlValues.setHorizontalSpacing(7)
-        self.gridLayoutControlValues.setVerticalSpacing(20)
-        self.gridLayoutControlValues.setObjectName("gridLayoutControlValues")
-        self.lineEditSectionY = QtWidgets.QLineEdit(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEditSectionY.sizePolicy().hasHeightForWidth())
-        self.lineEditSectionY.setSizePolicy(sizePolicy)
-        self.lineEditSectionY.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lineEditSectionY.setObjectName("lineEditSectionY")
-        self.gridLayoutControlValues.addWidget(self.lineEditSectionY, 4, 1, 1, 1, QtCore.Qt.AlignVCenter)
-        self.lineEditSectionX = QtWidgets.QLineEdit(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEditSectionX.sizePolicy().hasHeightForWidth())
-        self.lineEditSectionX.setSizePolicy(sizePolicy)
-        self.lineEditSectionX.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lineEditSectionX.setObjectName("lineEditSectionX")
-        self.gridLayoutControlValues.addWidget(self.lineEditSectionX, 3, 1, 1, 1, QtCore.Qt.AlignVCenter)
-        self.labelSectionX = QtWidgets.QLabel(self.centralwidget)
-        self.labelSectionX.setObjectName("labelSectionX")
-        self.gridLayoutControlValues.addWidget(self.labelSectionX, 3, 0, 1, 1)
-        self.labelSectionY = QtWidgets.QLabel(self.centralwidget)
-        self.labelSectionY.setObjectName("labelSectionY")
-        self.gridLayoutControlValues.addWidget(self.labelSectionY, 4, 0, 1, 1)
-        self.labelExposure = QtWidgets.QLabel(self.centralwidget)
-        self.labelExposure.setObjectName("labelExposure")
-        self.gridLayoutControlValues.addWidget(self.labelExposure, 2, 0, 1, 1)
-
-        self.labelMultiFits = QtWidgets.QLabel(self.centralwidget)
-        self.labelMultiFits.setObjectName("labelExposure")
-        self.gridLayoutControlValues.addWidget(self.labelMultiFits, 1, 0, 1, 1)
-
-        # self.labelSlices = QtWidgets.QLabel(self.centralwidget)
-        # self.labelSlices.setObjectName("labelSlices")
-        # self.gridLayoutControlValues.addWidget(self.labelSlices, 6, 0, 1, 1)
-
-        self.lineEditExposureTime = QtWidgets.QLineEdit(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEditExposureTime.sizePolicy().hasHeightForWidth())
-        self.lineEditExposureTime.setSizePolicy(sizePolicy)
-        self.lineEditExposureTime.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lineEditExposureTime.setObjectName("lineEditExposureTime")
-        self.gridLayoutControlValues.addWidget(self.lineEditExposureTime, 2, 1, 1, 1, QtCore.Qt.AlignVCenter)
-
-        self.lineEditMultiFits = QtWidgets.QLineEdit(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEditMultiFits.sizePolicy().hasHeightForWidth())
-        self.lineEditMultiFits.setSizePolicy(sizePolicy)
-        self.lineEditMultiFits.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
-        self.lineEditMultiFits.setObjectName("lineEditMultiFits")
-        self.gridLayoutControlValues.addWidget(self.lineEditMultiFits, 1, 1, 1, 1, QtCore.Qt.AlignVCenter)
-
-        # self.lineEditSlices = QtWidgets.QLineEdit(self.centralwidget)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.lineEditMultiFits.sizePolicy().hasHeightForWidth())
-        # self.lineEditSlices.setSizePolicy(sizePolicy)
-        # self.lineEditSlices.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
-        # self.lineEditSlices.setObjectName("lineEditSlices")
-        # self.gridLayoutControlValues.addWidget(self.lineEditSlices, 6, 1, 1, 1, QtCore.Qt.AlignVCenter)
-
-        self.lineEditAverageFrames = QtWidgets.QLineEdit(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.lineEditAverageFrames.sizePolicy().hasHeightForWidth())
-        self.lineEditAverageFrames.setSizePolicy(sizePolicy)
-        self.lineEditAverageFrames.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lineEditAverageFrames.setObjectName("lineEditAverageFrames")
-        self.gridLayoutControlValues.addWidget(self.lineEditAverageFrames, 5, 1, 1, 1)
-
-        self.labelAutoExposure = QtWidgets.QLabel(self.centralwidget)
-        self.labelAutoExposure.setObjectName("labelAutoExposure")
-        self.gridLayoutControlValues.addWidget(self.labelAutoExposure, 0, 0, 1, 1)
-        #
-        # self.labelMultipleFits = QtWidgets.QLabel(self.centralwidget)
-        # self.labelMultipleFits.setObjectName("labelMultipleFits")
-        # self.gridLayoutControlValues.addWidget(self.labelMultipleFits, 1, 0, 1, 1)
-
-        self.labelAverageFrames = QtWidgets.QLabel(self.centralwidget)
-        self.labelAverageFrames.setObjectName("labelAverageFrames")
-        self.gridLayoutControlValues.addWidget(self.labelAverageFrames, 5, 0, 1, 1)
-        self.checkBoxAutoExposure = QtWidgets.QCheckBox(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.checkBoxAutoExposure.sizePolicy().hasHeightForWidth())
-        self.checkBoxAutoExposure.setSizePolicy(sizePolicy)
-        self.checkBoxAutoExposure.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.checkBoxAutoExposure.setAutoFillBackground(False)
-        self.checkBoxAutoExposure.setText("")
-        self.checkBoxAutoExposure.setChecked(False)
-        self.checkBoxAutoExposure.setObjectName("checkBoxAutoExposure")
-        self.gridLayoutControlValues.addWidget(self.checkBoxAutoExposure, 0, 1, 1, 1)
-
-        # self.checkBoxMultipleFits = QtWidgets.QCheckBox(self.centralwidget)
-        # sizePolicy.setHeightForWidth(self.checkBoxMultipleFits.sizePolicy().hasHeightForWidth())
-        # self.checkBoxMultipleFits.setSizePolicy(sizePolicy)
-        # self.checkBoxMultipleFits.setLayoutDirection(QtCore.Qt.LeftToRight)
-        # self.checkBoxMultipleFits.setAutoFillBackground(False)
-        # self.checkBoxMultipleFits.setText("")
-        # self.checkBoxMultipleFits.setChecked(False)
-        # self.checkBoxMultipleFits.setObjectName("checkBoxMultipleFits")
-        # self.gridLayoutControlValues.addWidget(self.checkBoxMultipleFits, 1, 1, 1, 1)
-
-        self.gridLayoutControlValues.setColumnStretch(0, 1)
-        self.gridLayoutControlValues.setRowStretch(0, 1)
         self.verticalLayoutControl.addLayout(self.gridLayoutControlValues)
         self.verticalLayoutControl.setStretch(4, 2)
         self.verticalLayoutRight.addLayout(self.verticalLayoutControl)
+
         self.labelLog = QtWidgets.QLabel(self.centralwidget)
         self.labelLog.setObjectName("labelLog")
         self.verticalLayoutRight.addWidget(self.labelLog)
@@ -372,8 +340,11 @@ class Ui_MainWindow(object):
         self.plainTextEditLog.setObjectName("plainTextEditLog")
         self.verticalLayoutRight.addWidget(self.plainTextEditLog)
         self.horizontalLayoutWhole.addLayout(self.verticalLayoutRight)
-        self.horizontalLayoutWhole.setStretch(0, 3)
+
+        # --- STRETCH FACTORS ---
+        self.horizontalLayoutWhole.setStretch(0, 6)
         self.horizontalLayoutWhole.setStretch(1, 1)
+
         self.gridLayoutCenter.addLayout(self.horizontalLayoutWhole, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -436,12 +407,8 @@ class Ui_MainWindow(object):
         self.labelSectionY.setText(_translate("MainWindow", "Section Y (pixel) :"))
         self.labelExposure.setText(_translate("MainWindow", "Exposure Time (us)  :"))
         self.labelMultiFits.setText(_translate("MainWindow", "Number of Fits :"))
-        # self.labelSlices.setText(_translate("MainWindow", "Number of Slices :"))
         self.lineEditAverageFrames.setText(_translate("MainWindow", "1"))
         self.labelAutoExposure.setText(_translate("MainWindow", "Auto Exposure :"))
-
-        # self.labelMultipleFits.setText(_translate("MainWindow", "Multliple Fits :"))
-
         self.labelAverageFrames.setText(_translate("MainWindow", "Average Frames :"))
         self.labelLog.setText(_translate("MainWindow", "Log"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
@@ -455,9 +422,428 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
+# # -*- coding: utf-8 -*-
+#
+# # Form implementation generated from reading ui file 'FlirCamWindow.ui'
+# #
+# # Created by: PyQt5 UI code generator 5.15.0
+# #
+# # WARNING: Any manual changes made to this file will be lost when pyuic5 is
+# # run again.  Do not edit this file unless you know what you are doing.
+#
+#
+# from PyQt5 import QtCore, QtGui, QtWidgets
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtGui import *
+#
+# FONT = 'Arial'
+# FONTDIM = 16
+# CLMNDIM = 5
+#
+#
+# class Ui_MainWindow(object):
+#     def setupUi(self, MainWindow):
+#         MainWindow.setObjectName("MainWindow")
+#         MainWindow.resize(1250, 757)
+#         self.centralwidget = QtWidgets.QWidget(MainWindow)
+#
+#         # Main Sizing Policy
+#         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+#         sizePolicy.setHorizontalStretch(0)
+#         sizePolicy.setVerticalStretch(0)
+#         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+#         self.centralwidget.setSizePolicy(sizePolicy)
+#         self.centralwidget.setObjectName("centralwidget")
+#
+#         self.gridLayoutCenter = QtWidgets.QGridLayout(self.centralwidget)
+#         self.gridLayoutCenter.setObjectName("gridLayoutCenter")
+#         self.horizontalLayoutWhole = QtWidgets.QHBoxLayout()
+#         self.horizontalLayoutWhole.setObjectName("horizontalLayoutWhole")
+#         self.gridLayoutImage = QtWidgets.QGridLayout()
+#         self.gridLayoutImage.setObjectName("gridLayoutImage")
+#         self.gridLayoutFitResult = QtWidgets.QGridLayout()
+#         self.gridLayoutFitResult.setObjectName("gridLayoutFitResult")
+#         self.centralwidget.resize(100, 200)
+#
+#         self.param_font = QFont(FONT, FONTDIM)
+#         self.param_font.setPointSize(20)
+#
+#         # ==========================================================
+#         # LEFT PANEL: DATA DISPLAY
+#         # ==========================================================
+#
+#         ###### HEADERS ######
+#         self.labelAVG = QtWidgets.QLabel(self.centralwidget)
+#         self.labelAVG.setFont(QFont(FONT, FONTDIM))
+#         self.labelAVG.setObjectName("labelAVG")
+#         self.gridLayoutFitResult.addWidget(self.labelAVG, 0, 2, 1, 1)
+#
+#         self.labelD = QtWidgets.QLabel(self.centralwidget)
+#         self.labelD.setFont(QFont(FONT, FONTDIM))
+#         self.labelD.setObjectName("labelD")
+#         self.gridLayoutFitResult.addWidget(self.labelD, 0, 3, 1, 1)
+#
+#         ###### LABELS (Col 0) ######
+#         self.labelxCenter = QtWidgets.QLabel(self.centralwidget)
+#         self.labelxCenter.setFont(QFont(FONT, FONTDIM))
+#         self.labelxCenter.setObjectName("labelxCenter")
+#         self.gridLayoutFitResult.addWidget(self.labelxCenter, 1, 0, 1, 1)
+#
+#         self.labelyCenter = QtWidgets.QLabel(self.centralwidget)
+#         self.labelyCenter.setObjectName("labelyCenter")
+#         self.labelyCenter.setFont(QFont(FONT, FONTDIM))
+#         self.gridLayoutFitResult.addWidget(self.labelyCenter, 2, 0, 1, 1)
+#
+#         self.labelxWaist = QtWidgets.QLabel(self.centralwidget)
+#         self.labelxWaist.setObjectName("labelxWaist")
+#         self.labelxWaist.setFont(QFont(FONT, FONTDIM))
+#         self.gridLayoutFitResult.addWidget(self.labelxWaist, 3, 0, 1, 1)
+#
+#         self.labelyWaist = QtWidgets.QLabel(self.centralwidget)
+#         self.labelyWaist.setFont(QFont(FONT, FONTDIM))
+#         self.labelyWaist.setObjectName("labelyWaist")
+#         self.gridLayoutFitResult.addWidget(self.labelyWaist, 4, 0, 1, 1)
+#
+#         self.labelHeight = QtWidgets.QLabel(self.centralwidget)
+#         self.labelHeight.setObjectName("labelHeight")
+#         self.labelHeight.setFont(QFont(FONT, FONTDIM))
+#         self.gridLayoutFitResult.addWidget(self.labelHeight, 5, 0, 1, 1)
+#
+#         # --- REMOVED: Unit & Toggle Rows from here (Moved to Right Panel) ---
+#
+#         # --- ROW 1: X CENTER ---
+#         self.lineEditxCenter = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditxCenter.setEnabled(True)
+#         self.lineEditxCenter.setFont(self.param_font)
+#         self.lineEditxCenter.setFixedWidth(110)
+#         self.lineEditxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditxCenter.setObjectName("lineEditxCenter")
+#         self.gridLayoutFitResult.addWidget(self.lineEditxCenter, 1, 1, 1, 1)
+#
+#         self.lineEditAVGxCenter = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditAVGxCenter.setEnabled(True)
+#         self.lineEditAVGxCenter.setFont(self.param_font)
+#         self.lineEditAVGxCenter.setFixedWidth(110)
+#         self.lineEditAVGxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditAVGxCenter.setObjectName("lineEditAVGxCenter")
+#         self.gridLayoutFitResult.addWidget(self.lineEditAVGxCenter, 1, 2, 1, 1)
+#
+#         self.lineEditDxCenter = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditDxCenter.setEnabled(True)
+#         self.lineEditDxCenter.setFont(self.param_font)
+#         self.lineEditDxCenter.setFixedWidth(110)
+#         self.lineEditDxCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditDxCenter.setObjectName("lineEditDxCenter")
+#         self.gridLayoutFitResult.addWidget(self.lineEditDxCenter, 1, 3, 1, 1)
+#
+#         # --- ROW 2: Y CENTER ---
+#         self.lineEdityCenter = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEdityCenter.setEnabled(True)
+#         self.lineEdityCenter.setFont(self.param_font)
+#         self.lineEdityCenter.setFixedWidth(110)
+#         self.lineEdityCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEdityCenter.setObjectName("lineEdityCenter")
+#         self.gridLayoutFitResult.addWidget(self.lineEdityCenter, 2, 1, 1, 1)
+#
+#         self.lineEditAVGyCenter = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditAVGyCenter.setEnabled(True)
+#         self.lineEditAVGyCenter.setFont(self.param_font)
+#         self.lineEditAVGyCenter.setFixedWidth(110)
+#         self.lineEditAVGyCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditAVGyCenter.setObjectName("lineEditAVGyCenter")
+#         self.gridLayoutFitResult.addWidget(self.lineEditAVGyCenter, 2, 2, 1, 1)
+#
+#         self.lineEditDyCenter = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditDyCenter.setEnabled(True)
+#         self.lineEditDyCenter.setFont(self.param_font)
+#         self.lineEditDyCenter.setFixedWidth(110)
+#         self.lineEditDyCenter.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditDyCenter.setObjectName("lineEditDyCenter")
+#         self.gridLayoutFitResult.addWidget(self.lineEditDyCenter, 2, 3, 1, 1)
+#
+#         # --- ROWS 3, 4, 5: WIDE BOXES ---
+#         TOTAL_WIDTH = 340
+#
+#         # X WAIST
+#         self.lineEditxWaist = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditxWaist.setEnabled(True)
+#         self.lineEditxWaist.setFont(self.param_font)
+#         self.lineEditxWaist.setFixedWidth(TOTAL_WIDTH)
+#         self.lineEditxWaist.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditxWaist.setObjectName("lineEditxWaist")
+#         self.gridLayoutFitResult.addWidget(self.lineEditxWaist, 3, 1, 1, 3)
+#
+#         # Y WAIST
+#         self.lineEdityWaist = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEdityWaist.setEnabled(True)
+#         self.lineEdityWaist.setFont(self.param_font)
+#         self.lineEdityWaist.setFixedWidth(TOTAL_WIDTH)
+#         self.lineEdityWaist.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEdityWaist.setObjectName("lineEdityWaist")
+#         self.gridLayoutFitResult.addWidget(self.lineEdityWaist, 4, 1, 1, 3)
+#
+#         # HEIGHT
+#         self.lineEditHeight = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditHeight.setEnabled(True)
+#         self.lineEditHeight.setFont(self.param_font)
+#         self.lineEditHeight.setFixedWidth(TOTAL_WIDTH)
+#         self.lineEditHeight.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditHeight.setObjectName("lineEditHeight")
+#         self.gridLayoutFitResult.addWidget(self.lineEditHeight, 5, 1, 1, 3)
+#
+#         # --- REMOVED: Toggles Layout was here ---
+#
+#         self.gridLayoutImage.addLayout(self.gridLayoutFitResult, 1, 1, 1, 1)
+#
+#         self.labelImage = QtWidgets.QLabel(self.centralwidget)
+#         self.labelImage.setText("")
+#         self.labelImage.setObjectName("labelImage")
+#
+#         self.gridLayoutImage.addWidget(self.labelImage, 0, 0, 1, 1)
+#         self.gridLayoutImage.setColumnStretch(0, 3)
+#         self.gridLayoutImage.setColumnStretch(1, 1)
+#         self.gridLayoutImage.setRowStretch(0, 3)
+#         self.gridLayoutImage.setRowStretch(1, 1)
+#         self.horizontalLayoutWhole.addLayout(self.gridLayoutImage)
+#
+#         # ==========================================================
+#         # RIGHT PANEL: BUTTONS & CONTROLS
+#         # ==========================================================
+#         self.verticalLayoutRight = QtWidgets.QVBoxLayout()
+#         self.verticalLayoutRight.setSpacing(7)
+#         self.verticalLayoutRight.setObjectName("verticalLayoutRight")
+#         self.verticalLayoutControl = QtWidgets.QVBoxLayout()
+#         self.verticalLayoutControl.setSpacing(10)
+#         self.verticalLayoutControl.setObjectName("verticalLayoutControl")
+#
+#         self.pushButtonContinue = QtWidgets.QPushButton(self.centralwidget)
+#         self.pushButtonContinue.setObjectName("pushButtonContinue")
+#         self.verticalLayoutControl.addWidget(self.pushButtonContinue)
+#
+#         self.pushButtonSetBg = QtWidgets.QPushButton(self.centralwidget)
+#         self.pushButtonSetBg.setObjectName("pushButtonSetBg")
+#         self.verticalLayoutControl.addWidget(self.pushButtonSetBg)
+#
+#         self.pushButtonClearBg = QtWidgets.QPushButton(self.centralwidget)
+#         self.pushButtonClearBg.setObjectName("pushButtonClearBg")
+#         self.verticalLayoutControl.addWidget(self.pushButtonClearBg)
+#
+#         self.pushButtonSectionCenter = QtWidgets.QPushButton(self.centralwidget)
+#         self.pushButtonSectionCenter.setObjectName("pushButtonSectionCenter")
+#         self.verticalLayoutControl.addWidget(self.pushButtonSectionCenter)
+#
+#         # --- CONTROLS GRID ---
+#         self.gridLayoutControlValues = QtWidgets.QGridLayout()
+#         self.gridLayoutControlValues.setHorizontalSpacing(7)
+#         self.gridLayoutControlValues.setVerticalSpacing(20)
+#         self.gridLayoutControlValues.setObjectName("gridLayoutControlValues")
+#
+#         MIN_INPUT_WIDTH = 140
+#
+#         # Row 0
+#         self.labelAutoExposure = QtWidgets.QLabel(self.centralwidget)
+#         self.labelAutoExposure.setObjectName("labelAutoExposure")
+#         self.gridLayoutControlValues.addWidget(self.labelAutoExposure, 0, 0, 1, 1)
+#         self.checkBoxAutoExposure = QtWidgets.QCheckBox(self.centralwidget)
+#         self.checkBoxAutoExposure.setChecked(False)
+#         self.checkBoxAutoExposure.setObjectName("checkBoxAutoExposure")
+#         self.gridLayoutControlValues.addWidget(self.checkBoxAutoExposure, 0, 1, 1, 1)
+#
+#         # Row 1
+#         self.labelMultiFits = QtWidgets.QLabel(self.centralwidget)
+#         self.labelMultiFits.setObjectName("labelExposure")
+#         self.gridLayoutControlValues.addWidget(self.labelMultiFits, 1, 0, 1, 1)
+#         self.lineEditMultiFits = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditMultiFits.setMinimumWidth(MIN_INPUT_WIDTH)
+#         self.lineEditMultiFits.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditMultiFits.setObjectName("lineEditMultiFits")
+#         self.gridLayoutControlValues.addWidget(self.lineEditMultiFits, 1, 1, 1, 1)
+#
+#         # Row 2
+#         self.labelExposure = QtWidgets.QLabel(self.centralwidget)
+#         self.labelExposure.setObjectName("labelExposure")
+#         self.gridLayoutControlValues.addWidget(self.labelExposure, 2, 0, 1, 1)
+#         self.lineEditExposureTime = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditExposureTime.setMinimumWidth(MIN_INPUT_WIDTH)
+#         self.lineEditExposureTime.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditExposureTime.setObjectName("lineEditExposureTime")
+#         self.gridLayoutControlValues.addWidget(self.lineEditExposureTime, 2, 1, 1, 1)
+#
+#         # Row 3
+#         self.labelSectionX = QtWidgets.QLabel(self.centralwidget)
+#         self.labelSectionX.setObjectName("labelSectionX")
+#         self.gridLayoutControlValues.addWidget(self.labelSectionX, 3, 0, 1, 1)
+#         self.lineEditSectionX = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditSectionX.setMinimumWidth(MIN_INPUT_WIDTH)
+#         self.lineEditSectionX.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditSectionX.setObjectName("lineEditSectionX")
+#         self.gridLayoutControlValues.addWidget(self.lineEditSectionX, 3, 1, 1, 1)
+#
+#         # Row 4
+#         self.labelSectionY = QtWidgets.QLabel(self.centralwidget)
+#         self.labelSectionY.setObjectName("labelSectionY")
+#         self.gridLayoutControlValues.addWidget(self.labelSectionY, 4, 0, 1, 1)
+#         self.lineEditSectionY = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditSectionY.setMinimumWidth(MIN_INPUT_WIDTH)
+#         self.lineEditSectionY.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditSectionY.setObjectName("lineEditSectionY")
+#         self.gridLayoutControlValues.addWidget(self.lineEditSectionY, 4, 1, 1, 1)
+#
+#         # Row 5
+#         self.labelAverageFrames = QtWidgets.QLabel(self.centralwidget)
+#         self.labelAverageFrames.setObjectName("labelAverageFrames")
+#         self.gridLayoutControlValues.addWidget(self.labelAverageFrames, 5, 0, 1, 1)
+#         self.lineEditAverageFrames = QtWidgets.QLineEdit(self.centralwidget)
+#         self.lineEditAverageFrames.setMinimumWidth(MIN_INPUT_WIDTH)
+#         self.lineEditAverageFrames.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+#         self.lineEditAverageFrames.setObjectName("lineEditAverageFrames")
+#         self.gridLayoutControlValues.addWidget(self.lineEditAverageFrames, 5, 1, 1, 1)
+#
+#         # --- MOVED: UNIT ROW (Row 6) ---
+#         self.labelUnit = QtWidgets.QLabel(self.centralwidget)
+#         self.labelUnit.setObjectName("labelUnit")
+#         self.gridLayoutControlValues.addWidget(self.labelUnit, 6, 0, 1, 1)
+#
+#         self.horizontalLayoutUnit = QtWidgets.QHBoxLayout()
+#         self.horizontalLayoutUnit.setObjectName("horizontalLayoutUnit")
+#         self.radioButtonUnitUm = QtWidgets.QRadioButton(self.centralwidget)
+#         self.radioButtonUnitUm.setChecked(True)
+#         self.radioButtonUnitUm.setObjectName("radioButtonUnitUm")
+#         self.horizontalLayoutUnit.addWidget(self.radioButtonUnitUm)
+#         self.radioButtonUnitPixel = QtWidgets.QRadioButton(self.centralwidget)
+#         self.radioButtonUnitPixel.setChecked(False)
+#         self.radioButtonUnitPixel.setObjectName("radioButtonUnitPixel")
+#         self.horizontalLayoutUnit.addWidget(self.radioButtonUnitPixel)
+#         # Add to Column 1
+#         self.gridLayoutControlValues.addLayout(self.horizontalLayoutUnit, 6, 1, 1, 1)
+#
+#         # --- MOVED: TOGGLE ROW (Row 7) ---
+#         self.labelToggle = QtWidgets.QLabel(self.centralwidget)
+#         self.labelToggle.setObjectName("labelToggle")
+#         self.gridLayoutControlValues.addWidget(self.labelToggle, 7, 0, 1, 1)
+#
+#         self.horizontalLayoutToggle = QtWidgets.QHBoxLayout()
+#         self.checkBoxFit = QtWidgets.QCheckBox(self.centralwidget)
+#         self.checkBoxFit.setChecked(True)
+#         self.checkBoxFit.setObjectName("checkBoxFit")
+#         self.horizontalLayoutToggle.addWidget(self.checkBoxFit)
+#         self.checkBoxZoom = QtWidgets.QCheckBox(self.centralwidget)
+#         self.checkBoxZoom.setChecked(True)
+#         self.checkBoxZoom.setObjectName("checkBoxZoom")
+#         self.horizontalLayoutToggle.addWidget(self.checkBoxZoom)
+#         self.checkBoxCrosshair = QtWidgets.QCheckBox(self.centralwidget)
+#         self.checkBoxCrosshair.setChecked(True)
+#         self.checkBoxCrosshair.setObjectName("checkBoxCrosshair")
+#         self.horizontalLayoutToggle.addWidget(self.checkBoxCrosshair)
+#         # Add to Column 1
+#         self.gridLayoutControlValues.addLayout(self.horizontalLayoutToggle, 7, 1, 1, 1)
+#
+#         self.verticalLayoutControl.addLayout(self.gridLayoutControlValues)
+#         self.verticalLayoutControl.setStretch(4, 2)
+#         self.verticalLayoutRight.addLayout(self.verticalLayoutControl)
+#
+#         self.labelLog = QtWidgets.QLabel(self.centralwidget)
+#         self.labelLog.setObjectName("labelLog")
+#         self.verticalLayoutRight.addWidget(self.labelLog)
+#         self.plainTextEditLog = QtWidgets.QPlainTextEdit(self.centralwidget)
+#         self.plainTextEditLog.setPlainText("")
+#         self.plainTextEditLog.setObjectName("plainTextEditLog")
+#         self.verticalLayoutRight.addWidget(self.plainTextEditLog)
+#         self.horizontalLayoutWhole.addLayout(self.verticalLayoutRight)
+#
+#         # --- STRETCH FACTORS ---
+#         self.horizontalLayoutWhole.setStretch(0, 6)
+#         self.horizontalLayoutWhole.setStretch(1, 1)
+#
+#         self.gridLayoutCenter.addLayout(self.horizontalLayoutWhole, 0, 0, 1, 1)
+#         MainWindow.setCentralWidget(self.centralwidget)
+#         self.menubar = QtWidgets.QMenuBar(MainWindow)
+#         self.menubar.setEnabled(True)
+#         self.menubar.setGeometry(QtCore.QRect(0, 0, 1090, 26))
+#         self.menubar.setObjectName("menubar")
+#         self.menuFile = QtWidgets.QMenu(self.menubar)
+#         self.menuFile.setObjectName("menuFile")
+#         MainWindow.setMenuBar(self.menubar)
+#         self.statusbar = QtWidgets.QStatusBar(MainWindow)
+#         self.statusbar.setObjectName("statusbar")
+#         MainWindow.setStatusBar(self.statusbar)
+#         self.actionsave = QtWidgets.QAction(MainWindow)
+#         self.actionsave.setShortcutVisibleInContextMenu(True)
+#         self.actionsave.setObjectName("actionsave")
+#         self.actionsave_image = QtWidgets.QAction(MainWindow)
+#         self.actionsave_image.setObjectName("actionsave_image")
+#         self.actionsave_image_2 = QtWidgets.QAction(MainWindow)
+#         self.actionsave_image_2.setShortcutContext(QtCore.Qt.ApplicationShortcut)
+#         self.actionsave_image_2.setObjectName("actionsave_image_2")
+#         self.menuFile.addAction(self.actionsave_image_2)
+#         self.menubar.addAction(self.menuFile.menuAction())
+#
+#         self.retranslateUi(MainWindow)
+#         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+#
+#     def retranslateUi(self, MainWindow):
+#         _translate = QtCore.QCoreApplication.translate
+#         MainWindow.setWindowTitle(_translate("MainWindow", "FlirCamera"))
+#         self.labelAVG.setText(_translate("MainWindow", "Mean"))
+#         self.labelD.setText(_translate("MainWindow", "Std Dev"))
+#         self.labelxCenter.setText(_translate("MainWindow", "X Center"))
+#         self.labelyCenter.setText(_translate("MainWindow", "Y Center"))
+#         self.labelxWaist.setText(_translate("MainWindow", "X Waist"))
+#         self.labelyWaist.setText(_translate("MainWindow", "Y Waist"))
+#         self.labelHeight.setText(_translate("MainWindow", "Height"))
+#         self.labelUnit.setText(_translate("MainWindow", "Unit"))
+#         self.labelToggle.setText(_translate("MainWindow", "Enable/Disable"))
+#         self.lineEditxWaist.setText(_translate("MainWindow", "0"))
+#         self.lineEditxCenter.setText(_translate("MainWindow", "0"))
+#         self.lineEditAVGxCenter.setText(_translate("MainWindow", "0"))
+#         self.lineEditDxCenter.setText(_translate("MainWindow", "0"))
+#         self.lineEdityCenter.setText(_translate("MainWindow", "0"))
+#         self.lineEditAVGyCenter.setText(_translate("MainWindow", "0"))
+#         self.lineEditDyCenter.setText(_translate("MainWindow", "0"))
+#         self.lineEdityWaist.setText(_translate("MainWindow", "0"))
+#         self.lineEditHeight.setText(_translate("MainWindow", "0"))
+#         self.radioButtonUnitUm.setText(_translate("MainWindow", "um"))
+#         self.radioButtonUnitPixel.setText(_translate("MainWindow", "pixel"))
+#         self.checkBoxFit.setText(_translate("MainWindow", "Gaussian Fit"))
+#         self.checkBoxZoom.setText(_translate("MainWindow", "Zoom"))
+#         self.checkBoxCrosshair.setText(_translate("MainWindow", "Crosshair"))
+#         self.pushButtonContinue.setText(_translate("MainWindow", "Start Continue"))
+#         self.pushButtonSetBg.setText(_translate("MainWindow", "Set Background"))
+#         self.pushButtonClearBg.setText(_translate("MainWindow", "Clear Background"))
+#         self.pushButtonSectionCenter.setText(_translate("MainWindow", "Section Center"))
+#         self.lineEditSectionY.setText(_translate("MainWindow", "0"))
+#         self.lineEditSectionX.setText(_translate("MainWindow", "0"))
+#         self.labelSectionX.setText(_translate("MainWindow", "Section X (pixel) :"))
+#         self.labelSectionY.setText(_translate("MainWindow", "Section Y (pixel) :"))
+#         self.labelExposure.setText(_translate("MainWindow", "Exposure Time (us)  :"))
+#         self.labelMultiFits.setText(_translate("MainWindow", "Number of Fits :"))
+#         self.lineEditAverageFrames.setText(_translate("MainWindow", "1"))
+#         self.labelAutoExposure.setText(_translate("MainWindow", "Auto Exposure :"))
+#         self.labelAverageFrames.setText(_translate("MainWindow", "Average Frames :"))
+#         self.labelLog.setText(_translate("MainWindow", "Log"))
+#         self.menuFile.setTitle(_translate("MainWindow", "File"))
+#         self.actionsave.setText(_translate("MainWindow", "save"))
+#         self.actionsave.setShortcut(_translate("MainWindow", "Ctrl+S"))
+#         self.actionsave_image.setText(_translate("MainWindow", "save image"))
+#         self.actionsave_image.setShortcut(_translate("MainWindow", "Ctrl+S"))
+#         self.actionsave_image_2.setText(_translate("MainWindow", "save image"))
+#         self.actionsave_image_2.setShortcut(_translate("MainWindow", "Ctrl+S"))
+#
+#
+# if __name__ == "__main__":
+#     import sys
+#
+#     app = QtWidgets.QApplication(sys.argv)
+#     MainWindow = QtWidgets.QMainWindow()
+#     ui = Ui_MainWindow()
+#     ui.setupUi(MainWindow)
+#     MainWindow.show()
+#     sys.exit(app.exec_())

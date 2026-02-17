@@ -1,3 +1,4 @@
+
 from FlirCamController import FlirCamController
 from FlirWindowModify import Ui_CustomWindow
 from FlirCamFake import FakeCamController

@@ -1,6 +1,8 @@
+
+# original
 import tkinter
 import PySpin
-import pywin.dialogs.list
+# import pywin.dialogs.list
 from PyQt5.QtWidgets import QScrollBar
 from FlirCamSelector import ChoiceDialog
 from numpy import zeros, uint8
@@ -38,7 +40,7 @@ class FlirCamController:
         if num_cameras == 0:
             # Finish if there are no cameras
             self.close()
-            self.update_log('Not enough cameras!')
+            self.update_log('No cameras detected!')
         else:
             # Choose the first camera
             # self.cam = self.cam_list[0]
@@ -53,11 +55,24 @@ class FlirCamController:
             tk.iconbitmap(default="logo.ico")
             tk.withdraw()
             # List of all available working Flir Cameras at the lab
-            serial_list = ['19284652', '22129613','22532068', '25433705']
+            serial_list = ['19284652', '22129613','22532068', '25433705', '25450094'] # second to last has pixel size of 4.5 um; treat below
             dialog = ChoiceDialog(tk, 'Flir Camera Selector',
                                   text='Choose the desired camera via its serial number: \n (ignore the ones that are not on)',
                                   items=serial_list)
             self.cam = self.cam_list.GetBySerial("{}".format(dialog.selection))
+
+            ################################################
+            # 25/11/14 gt: set pixel size based on serial
+            selected_serial = "{}".format(dialog.selection)
+            self.cam = self.cam_list.GetBySerial(selected_serial)
+
+            if selected_serial == '25433705': # this one has a pixel size of 4.5 um, as opposed to the others
+                self.pixel_size = 4.5 # um
+                self.update_log(f'Camera {selected_serial} selected. Setting pixel size to 4.5 um.')
+            else:
+                # self.pixel_size is already 1.85 by default
+                self.update_log(f'Camera {selected_serial} selected. Using default pixel size {self.pixel_size} um.')
+            ################################################
 
             # Initialize camera
             self.cam.Init()
@@ -76,14 +91,44 @@ class FlirCamController:
         node_binningvertical.SetValue(1)
         self.update_log('%s is set to %f' % (node_binningvertical.GetDisplayName(), node_binningvertical.GetValue()))
 
-        # set frame size after binning
-        self.framewidth = 4000
-        self.frameheight = 3000
-        self.pixel_size *= 1
+        # (original) set frame size after binning
+        # self.framewidth = 4000
+        # self.frameheight = 3000
+        # self.pixel_size *= 1
+        # self.frame = zeros((self.frameheight, self.framewidth), dtype=uint8)
+        # self.background = zeros((self.frameheight, self.framewidth), dtype=uint8)
+        # self.nobackground = zeros((self.frameheight, self.framewidth), dtype=uint8)
+        # self.floatzeroframe = zeros((self.frameheight, self.framewidth))
+
+        ############################################
+        # 25/11/14 gt: get array size based on camera sensor dimensions
+        # Get the actual binning value to correctly scale pixel size
+        current_binning = node_binninghorizontal.GetValue()  # Assumes horizontal and vertical are the same
+        self.pixel_size *= current_binning
+        self.update_log(f'Pixel size scaled by binning ({current_binning}x). New pixel size: {self.pixel_size} um')
+
+        # Get actual frame size from camera *after* setting binning
+        # This is the fix for the broadcasting error
+        node_width = PySpin.CIntegerPtr(nodemap.GetNode('Width'))
+        if not PySpin.IsAvailable(node_width) or not PySpin.IsReadable(node_width):
+            self.update_log('Unable to read frame width. Aborting.')
+            return False
+        self.framewidth = node_width.GetValue()
+
+        node_height = PySpin.CIntegerPtr(nodemap.GetNode('Height'))
+        if not PySpin.IsAvailable(node_height) or not PySpin.IsReadable(node_height):
+            self.update_log('Unable to read frame height. Aborting.')
+            return False
+        self.frameheight = node_height.GetValue()
+
+        self.update_log(f'Initializing arrays with actual frame size: {self.framewidth}x{self.frameheight}')
+
+        # Initialize all frame buffers with the *correct* size
         self.frame = zeros((self.frameheight, self.framewidth), dtype=uint8)
         self.background = zeros((self.frameheight, self.framewidth), dtype=uint8)
         self.nobackground = zeros((self.frameheight, self.framewidth), dtype=uint8)
         self.floatzeroframe = zeros((self.frameheight, self.framewidth))
+        ####################################################
 
         # set lower and upper limit of auto exposure time
         node_exposuretimelowerlimit = PySpin.CFloatPtr(nodemap.GetNode('AutoExposureExposureTimeLowerLimit'))
